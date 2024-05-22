@@ -60,10 +60,23 @@ class MovieCard extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: '$BASE_IMAGE_URL${movie.posterPath}',
                   width: 80,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(),
+                  height:
+                      120, // Berikan tinggi tetap untuk placeholder dan gambar
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const SizedBox(
+                    width: 80,
+                    height: 120,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  errorWidget: (context, url, error) => const SizedBox(
+                    width: 80,
+                    height: 120,
+                    child: Center(
+                      child: Icon(Icons.error),
+                    ),
+                  ),
                 ),
               ),
             ),

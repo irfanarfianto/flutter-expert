@@ -33,26 +33,29 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Consumer<MovieDetailNotifier>(
-        builder: (context, provider, child) {
-          if (provider.movieState == RequestState.Loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (provider.movieState == RequestState.Loaded) {
-            final movie = provider.movie;
-            return SafeArea(
-              child: DetailContent(
-                movie,
-                provider.movieRecommendations,
-                provider.isAddedToWatchlist,
-              ),
-            );
-          } else {
-            return Text(provider.message);
-          }
-        },
+    return ScrollConfiguration(
+      behavior: const ScrollBehavior().copyWith(overscroll: false),
+      child: Scaffold(
+        body: Consumer<MovieDetailNotifier>(
+          builder: (context, provider, child) {
+            if (provider.movieState == RequestState.Loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (provider.movieState == RequestState.Loaded) {
+              final movie = provider.movie;
+              return SafeArea(
+                child: DetailContent(
+                  movie,
+                  provider.movieRecommendations,
+                  provider.isAddedToWatchlist,
+                ),
+              );
+            } else {
+              return Text(provider.message);
+            }
+          },
+        ),
       ),
     );
   }
