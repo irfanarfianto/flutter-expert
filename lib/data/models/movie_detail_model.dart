@@ -113,6 +113,7 @@ class MovieDetailResponse extends Equatable {
       title: title,
       voteAverage: voteAverage,
       voteCount: voteCount,
+      seasons: const [],
     );
   }
 

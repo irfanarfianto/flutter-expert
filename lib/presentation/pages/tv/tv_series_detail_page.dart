@@ -1,32 +1,32 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:submission_flutter_expert/common/constants.dart';
-import 'package:submission_flutter_expert/domain/entities/genre.dart';
-import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/domain/entities/movie_detail.dart';
-import 'package:submission_flutter_expert/presentation/provider/movie_detail_notifier.dart';
-import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:submission_flutter_expert/common/constants.dart';
+import 'package:submission_flutter_expert/common/state_enum.dart';
+import 'package:submission_flutter_expert/domain/entities/genre.dart';
+import 'package:submission_flutter_expert/domain/entities/tv.dart';
+import 'package:submission_flutter_expert/domain/entities/tv_detail.dart';
+import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 
-class MovieDetailPage extends StatefulWidget {
-  static const ROUTE_NAME = '/detail';
+class TvSeriesDetailPage extends StatefulWidget {
+  static const ROUTE_NAME = '/tv_detail';
 
   final int id;
-  const MovieDetailPage({super.key, required this.id});
+  const TvSeriesDetailPage({super.key, required this.id});
 
   @override
-  _MovieDetailPageState createState() => _MovieDetailPageState();
+  _TvSeriesDetailPageState createState() => _TvSeriesDetailPageState();
 }
 
-class _MovieDetailPageState extends State<MovieDetailPage> {
+class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<MovieDetailNotifier>(context, listen: false)
-          .fetchMovieDetail(widget.id);
-      Provider.of<MovieDetailNotifier>(context, listen: false)
+      Provider.of<TvDetailNotifier>(context, listen: false)
+          .fetchTvSeriesDetail(widget.id);
+      Provider.of<TvDetailNotifier>(context, listen: false)
           .loadWatchlistStatus(widget.id);
     });
   }
@@ -36,18 +36,18 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
     return ScrollConfiguration(
       behavior: const ScrollBehavior().copyWith(overscroll: false),
       child: Scaffold(
-        body: Consumer<MovieDetailNotifier>(
+        body: Consumer<TvDetailNotifier>(
           builder: (context, provider, child) {
-            if (provider.movieState == RequestState.Loading) {
+            if (provider.tvSeriesState == RequestState.Loading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (provider.movieState == RequestState.Loaded) {
-              final movie = provider.movie;
+            } else if (provider.tvSeriesState == RequestState.Loaded) {
+              final tvSeries = provider.tvSeries;
               return SafeArea(
                 child: DetailContent(
-                  movie,
-                  provider.movieRecommendations,
+                  tvSeries,
+                  provider.tvSeriesRecommendations,
                   provider.isAddedToWatchlist,
                 ),
               );
@@ -62,11 +62,13 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 }
 
 class DetailContent extends StatelessWidget {
-  final MovieDetail movie;
-  final List<Movie> recommendations;
+  final TvSeriesDetail tvSeries;
+  final List<TvSeries> recommendations;
   final bool isAddedWatchlist;
 
-  const DetailContent(this.movie, this.recommendations, this.isAddedWatchlist, {super.key});
+  const DetailContent(
+      this.tvSeries, this.recommendations, this.isAddedWatchlist,
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class DetailContent extends StatelessWidget {
     return Stack(
       children: [
         CachedNetworkImage(
-          imageUrl: 'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+          imageUrl: '$BASE_IMAGE_URL${tvSeries.posterPath}',
           width: screenWidth,
           placeholder: (context, url) => const Center(
             child: CircularProgressIndicator(),
@@ -105,33 +107,33 @@ class DetailContent extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              movie.title,
+                              tvSeries.name,
                               style: kHeading5,
                             ),
                             ElevatedButton(
                               onPressed: () async {
                                 if (!isAddedWatchlist) {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
-                                      .addWatchlist(movie);
+                                  await Provider.of<TvDetailNotifier>(
+                                    context,
+                                    listen: false,
+                                  ).addWatchlist(tvSeries);
                                 } else {
-                                  await Provider.of<MovieDetailNotifier>(
-                                          context,
-                                          listen: false)
-                                      .removeFromWatchlist(movie);
+                                  await Provider.of<TvDetailNotifier>(
+                                    context,
+                                    listen: false,
+                                  ).removeFromWatchlist(tvSeries);
                                 }
 
-                                final message =
-                                    Provider.of<MovieDetailNotifier>(context,
-                                            listen: false)
-                                        .watchlistMessage;
+                                final message = Provider.of<TvDetailNotifier>(
+                                  context,
+                                  listen: false,
+                                ).watchlistMessage;
 
                                 if (message ==
-                                        MovieDetailNotifier
+                                        TvDetailNotifier
                                             .watchlistAddSuccessMessage ||
                                     message ==
-                                        MovieDetailNotifier
+                                        TvDetailNotifier
                                             .watchlistRemoveSuccessMessage) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(message)));
@@ -156,15 +158,15 @@ class DetailContent extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              _showGenres(movie.genres),
+                              _showGenres(tvSeries.genres),
                             ),
                             Text(
-                              _showDuration(movie.runtime),
+                              _showDuration(tvSeries.runtime),
                             ),
                             Row(
                               children: [
                                 RatingBarIndicator(
-                                  rating: movie.voteAverage / 2,
+                                  rating: tvSeries.voteAverage / 2,
                                   itemCount: 5,
                                   itemBuilder: (context, index) => const Icon(
                                     Icons.star,
@@ -172,7 +174,7 @@ class DetailContent extends StatelessWidget {
                                   ),
                                   itemSize: 24,
                                 ),
-                                Text('${movie.voteAverage}')
+                                Text('${tvSeries.voteAverage}')
                               ],
                             ),
                             const SizedBox(height: 16),
@@ -181,14 +183,62 @@ class DetailContent extends StatelessWidget {
                               style: kHeading6,
                             ),
                             Text(
-                              movie.overview,
+                              tvSeries.overview,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Seasons',
+                              style: kHeading6,
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: tvSeries.seasons.length,
+                              itemBuilder: (context, index) {
+                                final season = tvSeries.seasons[index];
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${season.name}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: season.episodes.length,
+                                      itemBuilder: (context, index) {
+                                        final episode = season.episodes[index];
+                                        return ListTile(
+                                          title: Text(
+                                            episode.name,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            'Episode ${episode.episodeNumber}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                             const SizedBox(height: 16),
                             Text(
                               'Recommendations',
                               style: kHeading6,
                             ),
-                            Consumer<MovieDetailNotifier>(
+                            Consumer<TvDetailNotifier>(
                               builder: (context, data, child) {
                                 if (data.recommendationState ==
                                     RequestState.Loading) {
@@ -205,24 +255,25 @@ class DetailContent extends StatelessWidget {
                                     child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                        final movie = recommendations[index];
+                                        final tv = recommendations[index];
                                         return Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: InkWell(
                                             onTap: () {
                                               Navigator.pushReplacementNamed(
                                                 context,
-                                                MovieDetailPage.ROUTE_NAME,
-                                                arguments: movie.id,
+                                                TvSeriesDetailPage.ROUTE_NAME,
+                                                arguments: tv.id,
                                               );
                                             },
                                             child: ClipRRect(
-                                              borderRadius: const BorderRadius.all(
+                                              borderRadius:
+                                                  const BorderRadius.all(
                                                 Radius.circular(8),
                                               ),
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    'https://image.tmdb.org/t/p/w500${movie.posterPath}',
+                                                    '$BASE_IMAGE_URL${tv.posterPath}',
                                                 placeholder: (context, url) =>
                                                     const Center(
                                                   child:
@@ -260,9 +311,7 @@ class DetailContent extends StatelessWidget {
                 ),
               );
             },
-            // initialChildSize: 0.5,
             minChildSize: 0.25,
-            // maxChildSize: 1.0,
           ),
         ),
         Padding(

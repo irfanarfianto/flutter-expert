@@ -8,7 +8,7 @@ import 'package:dartz/dartz.dart' as i3;
 import 'package:submission_flutter_expert/common/failure.dart' as i6;
 import 'package:submission_flutter_expert/domain/entities/movie.dart' as i7;
 import 'package:submission_flutter_expert/domain/repositories/movie_repository.dart' as i2;
-import 'package:submission_flutter_expert/domain/usecases/get_popular_movies.dart' as i4;
+import 'package:submission_flutter_expert/domain/usecases/movies/get_popular_movies.dart' as i4;
 import 'package:mockito/mockito.dart' as i1;
 
 // ignore_for_file: avoid_redundant_argument_values

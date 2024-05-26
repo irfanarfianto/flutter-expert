@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_now_playing_movies.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_now_playing_movies.dart';
 import 'package:submission_flutter_expert/common/failure.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_popular_movies.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_top_rated_movies.dart';
-import 'package:submission_flutter_expert/presentation/provider/movie_list_notifier.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_popular_movies.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_top_rated_movies.dart';
+import 'package:submission_flutter_expert/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

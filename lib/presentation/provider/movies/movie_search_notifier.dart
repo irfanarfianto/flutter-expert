@@ -1,6 +1,6 @@
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/domain/usecases/search_movies.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/search_movies.dart';
 import 'package:flutter/foundation.dart';
 
 class MovieSearchNotifier extends ChangeNotifier {

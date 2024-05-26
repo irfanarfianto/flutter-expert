@@ -35,6 +35,7 @@ const testMovieDetail = MovieDetail(
   title: 'title',
   voteAverage: 1,
   voteCount: 1,
+  seasons: [],
 );
 
 final testWatchlistMovie = Movie.watchlist(

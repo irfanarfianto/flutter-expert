@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:submission_flutter_expert/common/failure.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_watchlist_movies.dart';
-import 'package:submission_flutter_expert/presentation/provider/watchlist_movie_notifier.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_watchlist_movies.dart';
+import 'package:submission_flutter_expert/presentation/provider/movies/watchlist_movie_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

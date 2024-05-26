@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:submission_flutter_expert/common/constants.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/presentation/pages/about_page.dart';
-import 'package:submission_flutter_expert/presentation/pages/movie_detail_page.dart';
-import 'package:submission_flutter_expert/presentation/pages/popular_movies_page.dart';
-import 'package:submission_flutter_expert/presentation/pages/search_page.dart';
-import 'package:submission_flutter_expert/presentation/pages/top_rated_movies_page.dart';
-import 'package:submission_flutter_expert/presentation/pages/watchlist_movies_page.dart';
-import 'package:submission_flutter_expert/presentation/provider/movie_list_notifier.dart';
+import 'package:submission_flutter_expert/presentation/pages/movies/movie_detail_page.dart';
+import 'package:submission_flutter_expert/presentation/pages/movies/popular_movies_page.dart';
+import 'package:submission_flutter_expert/presentation/pages/movies/top_rated_movies_page.dart';
+import 'package:submission_flutter_expert/presentation/provider/movies/movie_list_notifier.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,51 +32,6 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
     return ScrollConfiguration(
       behavior: const ScrollBehavior().copyWith(overscroll: false),
       child: Scaffold(
-        drawer: Drawer(
-          child: Column(
-            children: [
-              const UserAccountsDrawerHeader(
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('assets/circle-g.png'),
-                ),
-                accountName: Text('Ditonton'),
-                accountEmail: Text('ditonton@dicoding.com'),
-              ),
-              ListTile(
-                leading: const Icon(Icons.movie),
-                title: const Text('Movies'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.save_alt),
-                title: const Text('Watchlist'),
-                onTap: () {
-                  Navigator.pushNamed(context, WatchlistMoviesPage.ROUTE_NAME);
-                },
-              ),
-              ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
-                },
-                leading: const Icon(Icons.info_outline),
-                title: const Text('About'),
-              ),
-            ],
-          ),
-        ),
-        appBar: AppBar(
-          title: const Text('Ditonton'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, SearchPage.ROUTE_NAME);
-              },
-              icon: const Icon(Icons.search),
-            )
-          ],
-        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(

@@ -1,7 +1,7 @@
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/presentation/pages/movie_detail_page.dart';
-import 'package:submission_flutter_expert/presentation/provider/movie_detail_notifier.dart';
+import 'package:submission_flutter_expert/presentation/pages/movies/movie_detail_page.dart';
+import 'package:submission_flutter_expert/presentation/provider/movies/movie_detail_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';

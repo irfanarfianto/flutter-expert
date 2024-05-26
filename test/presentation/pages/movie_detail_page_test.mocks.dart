@@ -8,12 +8,12 @@ import 'dart:ui' as i12;
 import 'package:submission_flutter_expert/common/state_enum.dart' as i9;
 import 'package:submission_flutter_expert/domain/entities/movie.dart' as i10;
 import 'package:submission_flutter_expert/domain/entities/movie_detail.dart' as i7;
-import 'package:submission_flutter_expert/domain/usecases/get_movie_detail.dart' as i2;
-import 'package:submission_flutter_expert/domain/usecases/get_movie_recommendations.dart' as i3;
+import 'package:submission_flutter_expert/domain/usecases/movies/get_movie_detail.dart' as i2;
+import 'package:submission_flutter_expert/domain/usecases/movies/get_movie_recommendations.dart' as i3;
 import 'package:submission_flutter_expert/domain/usecases/get_watchlist_status.dart' as i4;
 import 'package:submission_flutter_expert/domain/usecases/remove_watchlist.dart' as i6;
 import 'package:submission_flutter_expert/domain/usecases/save_watchlist.dart' as i5;
-import 'package:submission_flutter_expert/presentation/provider/movie_detail_notifier.dart'
+import 'package:submission_flutter_expert/presentation/provider/movies/movie_detail_notifier.dart'
     as i8;
 import 'package:mockito/mockito.dart' as i1;
 

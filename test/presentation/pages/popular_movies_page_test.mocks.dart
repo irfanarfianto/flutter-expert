@@ -7,8 +7,8 @@ import 'dart:ui' as i7;
 
 import 'package:submission_flutter_expert/common/state_enum.dart' as i4;
 import 'package:submission_flutter_expert/domain/entities/movie.dart' as i5;
-import 'package:submission_flutter_expert/domain/usecases/get_popular_movies.dart' as i2;
-import 'package:submission_flutter_expert/presentation/provider/popular_movies_notifier.dart'
+import 'package:submission_flutter_expert/domain/usecases/movies/get_popular_movies.dart' as i2;
+import 'package:submission_flutter_expert/presentation/provider/movies/popular_movies_notifier.dart'
     as i3;
 import 'package:mockito/mockito.dart' as i1;
 

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
 import 'package:submission_flutter_expert/domain/entities/movie_detail.dart';
+// import 'package:submission_flutter_expert/domain/entities/movie_detail.dart';
 
 class MovieTable extends Equatable {
   final int id;

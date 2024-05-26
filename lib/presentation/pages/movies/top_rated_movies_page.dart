@@ -1,5 +1,5 @@
 import 'package:submission_flutter_expert/common/state_enum.dart';
-import 'package:submission_flutter_expert/presentation/provider/top_rated_movies_notifier.dart';
+import 'package:submission_flutter_expert/presentation/provider/movies/top_rated_movies_notifier.dart';
 import 'package:submission_flutter_expert/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,12 +39,14 @@ class _TopRatedMoviesPageState extends State<TopRatedMoviesPage> {
                   child: CircularProgressIndicator(),
                 );
               } else if (data.state == RequestState.Loaded) {
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    final movie = data.movies[index];
-                    return MovieCard(movie);
-                  },
-                  itemCount: data.movies.length,
+                return Scrollbar(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      final movie = data.movies[index];
+                      return MovieCard(movie);
+                    },
+                    itemCount: data.movies.length,
+                  ),
                 );
               } else {
                 return Center(

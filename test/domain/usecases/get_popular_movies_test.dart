@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_popular_movies.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_popular_movies.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

@@ -1,7 +1,7 @@
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
 import 'package:submission_flutter_expert/domain/entities/movie_detail.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_movie_detail.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_movie_recommendations.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_movie_detail.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_movie_recommendations.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/usecases/get_watchlist_status.dart';
 import 'package:submission_flutter_expert/domain/usecases/remove_watchlist.dart';

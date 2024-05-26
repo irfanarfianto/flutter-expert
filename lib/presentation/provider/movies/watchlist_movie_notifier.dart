@@ -1,6 +1,6 @@
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
-import 'package:submission_flutter_expert/domain/usecases/get_watchlist_movies.dart';
+import 'package:submission_flutter_expert/domain/usecases/movies/get_watchlist_movies.dart';
 import 'package:flutter/foundation.dart';
 
 class WatchlistMovieNotifier extends ChangeNotifier {
