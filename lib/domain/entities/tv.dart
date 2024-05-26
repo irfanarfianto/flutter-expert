@@ -16,6 +16,13 @@ class TvSeries extends Equatable {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    this.homepage,
+    this.imdbId,
+    this.originalLanguage,
+    this.releaseDate,
+    this.revenue,
+    this.status,
+    this.tagline,
   });
 
   TvSeries.watchlist({
@@ -38,6 +45,14 @@ class TvSeries extends Equatable {
   bool? video;
   double? voteAverage;
   int? voteCount;
+  String? homepage;
+  String? imdbId;
+  String? originalLanguage;
+
+  String? releaseDate;
+  int? revenue;
+  String? status;
+  String? tagline;
 
   @override
   List<Object?> get props => [
@@ -54,5 +69,14 @@ class TvSeries extends Equatable {
         video,
         voteAverage,
         voteCount,
+        homepage,
+        imdbId,
+        originalLanguage,
+        popularity,
+        releaseDate,
+        revenue,
+        status,
+        tagline,
+        video
       ];
 }

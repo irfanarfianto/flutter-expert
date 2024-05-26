@@ -7,7 +7,7 @@ import 'package:submission_flutter_expert/presentation/widgets/tv_series_card.da
 class PopularTvSeriesPage extends StatefulWidget {
   static const ROUTE_NAME = '/popular-tv-series';
 
-  const PopularTvSeriesPage({Key? key}) : super(key: key);
+  const PopularTvSeriesPage({super.key});
 
   @override
   _PopularTvSeriesPageState createState() => _PopularTvSeriesPageState();

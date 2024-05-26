@@ -10,7 +10,7 @@ import 'package:submission_flutter_expert/presentation/pages/tv/tv_series_detail
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_list_notifier.dart';
 
 class HomeTvSeriesPage extends StatefulWidget {
-  const HomeTvSeriesPage({Key? key}) : super(key: key);
+  const HomeTvSeriesPage({super.key});
 
   @override
   _HomeTvSeriesPageState createState() => _HomeTvSeriesPageState();
@@ -132,7 +132,7 @@ class _HomeTvSeriesPageState extends State<HomeTvSeriesPage> {
 class TvSeriesList extends StatelessWidget {
   final List<TvSeries> tvSeries;
 
-  const TvSeriesList(this.tvSeries, {Key? key}) : super(key: key);
+  const TvSeriesList(this.tvSeries, {super.key});
 
   @override
   Widget build(BuildContext context) {
