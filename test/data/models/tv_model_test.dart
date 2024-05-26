@@ -35,11 +35,18 @@ void main() {
     name: 'name',
     originalName: 'originalName',
     overview: 'overview',
-    popularity: 1,
     posterPath: 'posterPath',
-    video: false,
     voteAverage: 1,
     voteCount: 1,
+    popularity: 1,
+    video: false,
+    releaseDate: 'releaseDate',
+    homepage: 'homepage',
+    imdbId: 'imdbId',
+    originalLanguage: 'originalLanguage',
+    revenue: 1,
+    status: 'status',
+    tagline: 'tagline',
   );
 
   test('should be a subclass of Movie entity', () async {

@@ -1,10 +1,10 @@
-import 'package:submission_flutter_expert/common/state_enum.dart';
-import 'package:submission_flutter_expert/domain/entities/tv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
+import 'package:submission_flutter_expert/common/state_enum.dart';
+import 'package:submission_flutter_expert/domain/entities/tv.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/tv_series_detail_page.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 
@@ -29,7 +29,7 @@ void main() {
   }
 
   testWidgets(
-      'Watchlist button should display add icon when TvSeries not added to watchlist',
+      'Watchlist button should display add icon when Tv Series not added to watchlist',
       (WidgetTester tester) async {
     when(mockNotifier.tvSeriesState).thenReturn(RequestState.Loaded);
     when(mockNotifier.tvSeries).thenReturn(testTvDetail);
@@ -39,23 +39,25 @@ void main() {
 
     final watchlistButtonIcon = find.byIcon(Icons.add);
 
-    await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+    await tester
+        .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
     expect(watchlistButtonIcon, findsOneWidget);
   });
 
   testWidgets(
-      'Watchlist button should dispay check icon when movie is added to wathclist',
+      'Watchlist button should display check icon when Tv Series is added to watchlist',
       (WidgetTester tester) async {
     when(mockNotifier.tvSeriesState).thenReturn(RequestState.Loaded);
     when(mockNotifier.tvSeries).thenReturn(testTvDetail);
     when(mockNotifier.recommendationState).thenReturn(RequestState.Loaded);
     when(mockNotifier.tvSeriesRecommendations).thenReturn(<TvSeries>[]);
-    when(mockNotifier.isAddedToWatchlist).thenReturn(false);
+    when(mockNotifier.isAddedToWatchlist).thenReturn(true);
 
     final watchlistButtonIcon = find.byIcon(Icons.check);
 
-    await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+    await tester
+        .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
     expect(watchlistButtonIcon, findsOneWidget);
   });
@@ -72,7 +74,8 @@ void main() {
 
     final watchlistButton = find.byType(ElevatedButton);
 
-    await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+    await tester
+        .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
     expect(find.byIcon(Icons.add), findsOneWidget);
 
@@ -95,7 +98,8 @@ void main() {
 
     final watchlistButton = find.byType(ElevatedButton);
 
-    await tester.pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
+    await tester
+        .pumpWidget(makeTestableWidget(const TvSeriesDetailPage(id: 1)));
 
     expect(find.byIcon(Icons.add), findsOneWidget);
 

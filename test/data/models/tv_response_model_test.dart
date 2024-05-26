@@ -26,6 +26,8 @@ void main() {
     revenue: 0,
     status: 'status',
     tagline: 'tagline',
+    homepage: 'homepage',
+    imdbId: 'imdbId',
   );
 
   const tTvSeriesResponseModel =
@@ -63,6 +65,15 @@ void main() {
             "name": "Name",
             "vote_average": 1.0,
             "vote_count": 1,
+            "video": false,
+            "original_language": "en",
+            "release_date": "2020-05-05",
+            "revenue": 0,
+            "status": 'status',
+            "tagline": 'tagline',
+            "adult": false,
+            "homepage": 'homepage',
+            "imdb_id": 'imdbId',
           }
         ],
       };
