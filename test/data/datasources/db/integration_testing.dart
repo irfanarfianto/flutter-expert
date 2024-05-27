@@ -25,7 +25,7 @@ void main() {
       );
 
       // Act
-      await databaseHelper.insertWatchlist(movie);
+      await databaseHelper.insertMovieWatchlist(movie);
       final result = await databaseHelper.getMovieById(movie.id);
 
       // Assert
@@ -48,7 +48,7 @@ void main() {
       );
 
       // Act
-      await databaseHelper.insertWatchlistTvSeries(tvSeries);
+      await databaseHelper.insertTvSeriesWatchlist(tvSeries);
       final result = await databaseHelper.getTvSeriesById(tvSeries.id);
 
       // Assert
@@ -60,7 +60,5 @@ void main() {
         'type': 'tvSeries',
       });
     });
-
-    // Add more tests for other operations if needed
   });
 }

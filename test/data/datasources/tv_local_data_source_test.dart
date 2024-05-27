@@ -19,7 +19,7 @@ void main() {
     test('should return success message when insert to database is success',
         () async {
       // arrange
-      when(mockDatabaseHelper.insertWatchlistTvSeries(testTvTable))
+      when(mockDatabaseHelper.insertTvSeriesWatchlist(testTvTable))
           .thenAnswer((_) async => 1);
       // act
       final result = await dataSource.insertWatchlistTvSeries(testTvTable);
@@ -30,7 +30,7 @@ void main() {
     test('should throw DatabaseException when insert to database is failed',
         () async {
       // arrange
-      when(mockDatabaseHelper.insertWatchlistTvSeries(testTvTable))
+      when(mockDatabaseHelper.insertTvSeriesWatchlist(testTvTable))
           .thenThrow(Exception());
       // act
       final call = dataSource.insertWatchlistTvSeries(testTvTable);
@@ -43,7 +43,7 @@ void main() {
     test('should return success message when remove from database is success',
         () async {
       // arrange
-      when(mockDatabaseHelper.removeWatchlistTvSeries(testTvTable))
+      when(mockDatabaseHelper.removeTvSeriesWatchlist(testTvTable))
           .thenAnswer((_) async => 1);
       // act
       final result = await dataSource.removeWatchlistTvSeries(testTvTable);
@@ -54,7 +54,7 @@ void main() {
     test('should throw DatabaseException when remove from database is failed',
         () async {
       // arrange
-      when(mockDatabaseHelper.removeWatchlistTvSeries(testTvTable))
+      when(mockDatabaseHelper.removeTvSeriesWatchlist(testTvTable))
           .thenThrow(Exception());
       // act
       final call = dataSource.removeWatchlistTvSeries(testTvTable);

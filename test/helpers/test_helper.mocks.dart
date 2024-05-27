@@ -441,40 +441,40 @@ class MockDatabaseHelper extends _i1.Mock implements _i16.DatabaseHelper {
       ) as _i7.Future<_i17.Database?>);
 
   @override
-  _i7.Future<int> insertWatchlist(_i14.MovieTable? movie) =>
+  _i7.Future<int> insertMovieWatchlist(_i14.MovieTable? movie) =>
       (super.noSuchMethod(
         Invocation.method(
-          #insertWatchlist,
+          #insertMovieWatchlist,
           [movie],
         ),
         returnValue: _i7.Future<int>.value(0),
       ) as _i7.Future<int>);
 
   @override
-  _i7.Future<int> insertWatchlistTvSeries(_i18.TvTable? tvSeries) =>
+  _i7.Future<int> insertTvSeriesWatchlist(_i18.TvTable? tvSeries) =>
       (super.noSuchMethod(
         Invocation.method(
-          #insertWatchlistTvSeries,
+          #insertTvSeriesWatchlist,
           [tvSeries],
         ),
         returnValue: _i7.Future<int>.value(0),
       ) as _i7.Future<int>);
 
   @override
-  _i7.Future<int> removeWatchlist(_i14.MovieTable? movie) =>
+  _i7.Future<int> removeMovieWatchlist(_i14.MovieTable? movie) =>
       (super.noSuchMethod(
         Invocation.method(
-          #removeWatchlist,
+          #removeMovieWatchlist,
           [movie],
         ),
         returnValue: _i7.Future<int>.value(0),
       ) as _i7.Future<int>);
 
   @override
-  _i7.Future<int> removeWatchlistTvSeries(_i18.TvTable? tvSeries) =>
+  _i7.Future<int> removeTvSeriesWatchlist(_i18.TvTable? tvSeries) =>
       (super.noSuchMethod(
         Invocation.method(
-          #removeWatchlistTvSeries,
+          #removeTvSeriesWatchlist,
           [tvSeries],
         ),
         returnValue: _i7.Future<int>.value(0),
