@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:submission_flutter_expert/domain/entities/episode.dart';
 import 'package:submission_flutter_expert/data/models/season_model.dart';
 import 'package:submission_flutter_expert/domain/entities/season.dart';
 
