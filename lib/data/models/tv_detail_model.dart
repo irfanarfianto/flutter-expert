@@ -52,16 +52,16 @@ class TvSeriesDetailResponse extends Equatable {
 
   factory TvSeriesDetailResponse.fromJson(Map<String, dynamic> json) =>
       TvSeriesDetailResponse(
-        homepage: json["homepage"],
-        imdbId: json["imdb_id"],
-        originalLanguage: json["original_language"],
-        popularity: json["popularity"].toDouble(),
-        releaseDate: json["release_date"],
-        revenue: json["revenue"],
-        status: json["status"],
+        homepage: json["homepage"] ?? "",
+        imdbId: json["imdb_id"] ?? "",
+        originalLanguage: json["original_language"] ?? "",
+        popularity: json["popularity"].toDouble() ?? 0.0,
+        releaseDate: json["release_date"] ?? "",
+        revenue: json["revenue"] ?? 0,
+        status: json["status"] ?? "",
         tagline: json["tagline"],
-        video: json["video"],
-        adult: json["adult"],
+        video: json["video"] ?? false,
+        adult: json["adult"] ?? false,
         id: json["id"],
         name: json["name"] ?? "",
         originalName: json["original_name"] ?? "",
@@ -122,7 +122,6 @@ class TvSeriesDetailResponse extends Equatable {
       voteAverage: voteAverage,
       voteCount: voteCount,
       seasons: seasons.map((seasons) => seasons.toEntity()).toList(),
-
     );
   }
 
