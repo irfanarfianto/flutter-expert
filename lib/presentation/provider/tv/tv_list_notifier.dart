@@ -5,7 +5,6 @@ import 'package:submission_flutter_expert/domain/usecases/tv/get_now_playing_tv.
 import 'package:submission_flutter_expert/domain/usecases/tv/get_popular_tv.dart';
 import 'package:submission_flutter_expert/domain/usecases/tv/get_top_rated_tv.dart';
 
-
 class TvListNotifier extends ChangeNotifier {
   var _onTheAirTvSeries = <TvSeries>[];
   List<TvSeries> get onTheAirTvSeries => _onTheAirTvSeries;

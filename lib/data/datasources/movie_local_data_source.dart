@@ -1,4 +1,3 @@
-
 import 'package:submission_flutter_expert/common/exception.dart';
 import 'package:submission_flutter_expert/data/datasources/db/database_helper.dart';
 import 'package:submission_flutter_expert/data/models/movie_table.dart';

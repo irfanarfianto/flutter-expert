@@ -66,8 +66,8 @@ class TvSeriesDetailResponse extends Equatable {
         name: json["name"] ?? "",
         originalName: json["original_name"] ?? "",
         overview: json["overview"],
-        posterPath: json["poster_path"],
-        backdropPath: json["backdrop_path"],
+        posterPath: json["poster_path"] ?? "",
+        backdropPath: json["backdrop_path"] ?? "",
         runtime: json['episode_run_time'] != null &&
                 json['episode_run_time'].isNotEmpty
             ? (json['episode_run_time'][0] as int)

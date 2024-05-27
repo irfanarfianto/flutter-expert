@@ -15,7 +15,6 @@ class RemoveWatchlist {
   }
 }
 
-
 class RemoveWatchlistTvSeries {
   final TvSeriesRepository repository;
 

@@ -15,7 +15,7 @@ class TvSeriesDetail extends Equatable {
     required this.runtime,
     required this.voteAverage,
     required this.voteCount,
-    required this.seasons, 
+    required this.seasons,
   });
 
   final bool adult;
@@ -29,7 +29,7 @@ class TvSeriesDetail extends Equatable {
   final int runtime;
   final double voteAverage;
   final int voteCount;
-  final List<Season> seasons; 
+  final List<Season> seasons;
 
   @override
   List<Object?> get props => [
