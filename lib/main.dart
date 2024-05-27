@@ -21,6 +21,7 @@ import 'package:submission_flutter_expert/presentation/provider/movies/watchlist
 import 'package:submission_flutter_expert/presentation/provider/tv/airing_today_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_list_notifier.dart';
+import 'package:submission_flutter_expert/presentation/provider/tv/tv_search_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/watchlist_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/popular_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/top_rated_tv_series_notifier.dart';
@@ -77,6 +78,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<AiringTodayTvSeriesNotifier>(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.locator<TvSeriesSearchNotifier>(),
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<WatchlistNotifier>(),

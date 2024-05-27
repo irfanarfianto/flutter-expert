@@ -34,6 +34,7 @@ import 'package:submission_flutter_expert/presentation/provider/movies/watchlist
 import 'package:submission_flutter_expert/presentation/provider/tv/airing_today_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_list_notifier.dart';
+import 'package:submission_flutter_expert/presentation/provider/tv/tv_search_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/watchlist_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/popular_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/top_rated_tv_series_notifier.dart';
@@ -116,6 +117,11 @@ void init() {
   locator.registerFactory(
     () => WatchlistTvSeriesNotifier(
       getWatchlistTvSeries: locator(),
+    ),
+  );
+  locator.registerFactory(
+    () => TvSeriesSearchNotifier(
+      searchTvSeries: locator(),
     ),
   );
 

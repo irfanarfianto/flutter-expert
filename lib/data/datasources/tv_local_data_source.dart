@@ -17,7 +17,7 @@ class TvLocalDataSourceImpl implements TvLocalDataSource {
   @override
   Future<String> insertWatchlistTvSeries(TvTable tvSeries) async {
     try {
-      await databaseHelper.insertWatchlistTvSeries(tvSeries);
+      await databaseHelper.insertTvSeriesWatchlist(tvSeries);
       return 'Added to Watchlist';
     } catch (e) {
       throw DatabaseException(e.toString());
@@ -27,7 +27,7 @@ class TvLocalDataSourceImpl implements TvLocalDataSource {
   @override
   Future<String> removeWatchlistTvSeries(TvTable tvSeries) async {
     try {
-      await databaseHelper.removeWatchlistTvSeries(tvSeries);
+      await databaseHelper.removeTvSeriesWatchlist(tvSeries);
       return 'Removed from Watchlist';
     } catch (e) {
       throw DatabaseException(e.toString());

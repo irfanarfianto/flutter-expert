@@ -1,9 +1,11 @@
 import 'package:submission_flutter_expert/common/constants.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/presentation/provider/movies/movie_search_notifier.dart';
+import 'package:submission_flutter_expert/presentation/provider/tv/tv_search_notifier.dart';
 import 'package:submission_flutter_expert/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:submission_flutter_expert/presentation/widgets/tv_series_card.dart';
 
 class SearchPage extends StatelessWidget {
   static const ROUTE_NAME = '/search';
@@ -27,6 +29,8 @@ class SearchPage extends StatelessWidget {
                 onSubmitted: (query) {
                   Provider.of<MovieSearchNotifier>(context, listen: false)
                       .fetchMovieSearch(query);
+                  Provider.of<TvSeriesSearchNotifier>(context, listen: false)
+                      .fetchTvSeriesSearch(query);
                 },
                 decoration: const InputDecoration(
                   hintText: 'Search title',
@@ -37,7 +41,7 @@ class SearchPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'Search Result',
+                'Search Result (Movies)',
                 style: kHeading6,
               ),
               Consumer<MovieSearchNotifier>(
@@ -54,6 +58,38 @@ class SearchPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final movie = data.searchResult[index];
                           return MovieCard(movie);
+                        },
+                        itemCount: result.length,
+                      ),
+                    );
+                  } else {
+                    return Expanded(
+                      child: Container(),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Search Result (TV Series)',
+                style: kHeading6,
+              ),
+              Consumer<TvSeriesSearchNotifier>(
+                // Consumer untuk TvSearchNotifier
+                builder: (context, data, child) {
+                  if (data.state == RequestState.Loading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (data.state == RequestState.Loaded) {
+                    final result = data.searchResult;
+                    return Expanded(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemBuilder: (context, index) {
+                          final tvSeries = data.searchResult[index];
+                          return TvSeriesCard(
+                              tvSeries); // Gunakan widget TvSeriesCard
                         },
                         itemCount: result.length,
                       ),
