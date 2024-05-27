@@ -31,6 +31,7 @@ import 'package:submission_flutter_expert/presentation/provider/movies/movie_sea
 import 'package:submission_flutter_expert/presentation/provider/movies/popular_movies_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/movies/top_rated_movies_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/movies/watchlist_movie_notifier.dart';
+import 'package:submission_flutter_expert/presentation/provider/tv/airing_today_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_list_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/watchlist_tv_series_notifier.dart';
@@ -89,6 +90,11 @@ void init() {
     ),
   );
   locator.registerFactory(
+    () => AiringTodayTvSeriesNotifier(
+      locator(),
+    ),
+  );
+  locator.registerFactory(
     () => TvDetailNotifier(
       getTvDetail: locator(),
       getTvRecommendations: locator(),
@@ -115,12 +121,10 @@ void init() {
 
   locator.registerFactory(
     () => WatchlistNotifier(
-      getWatchlistMovies:locator(),
-      getWatchlistTvSeries:locator(),
+      getWatchlistMovies: locator(),
+      getWatchlistTvSeries: locator(),
     ),
   );
-
-
 
   // Use Case - Movies
   locator.registerLazySingleton(() => GetNowPlayingMovies(locator()));

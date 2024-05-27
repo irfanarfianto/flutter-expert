@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:submission_flutter_expert/common/constants.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/tv.dart';
+import 'package:submission_flutter_expert/presentation/pages/tv/airing_tv_today_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/popular_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/top_rated_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/tv_series_detail_page.dart';
@@ -39,9 +40,12 @@ class _HomeTvSeriesPageState extends State<HomeTvSeriesPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Airing Today',
-                  style: kHeading6,
+                _buildSubHeading(
+                  title: 'Airing Today',
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    AiringTodayTvSeriesPage.ROUTE_NAME,
+                  ),
                 ),
                 Consumer<TvListNotifier>(
                   builder: (context, data, child) {

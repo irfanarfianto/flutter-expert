@@ -6,6 +6,7 @@ import 'package:submission_flutter_expert/presentation/pages/movies/movie_detail
 import 'package:submission_flutter_expert/presentation/pages/movies/popular_movies_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/movies/top_rated_movies_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/search_page.dart';
+import 'package:submission_flutter_expert/presentation/pages/tv/airing_tv_today_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/popular_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/top_rated_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/tv_series_detail_page.dart';
@@ -17,6 +18,7 @@ import 'package:submission_flutter_expert/presentation/provider/movies/movie_sea
 import 'package:submission_flutter_expert/presentation/provider/movies/popular_movies_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/movies/top_rated_movies_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/movies/watchlist_movie_notifier.dart';
+import 'package:submission_flutter_expert/presentation/provider/tv/airing_today_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_list_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/watchlist_tv_series_notifier.dart';
@@ -74,6 +76,9 @@ class MyApp extends StatelessWidget {
           create: (_) => di.locator<WatchlistTvSeriesNotifier>(),
         ),
         ChangeNotifierProvider(
+          create: (_) => di.locator<AiringTodayTvSeriesNotifier>(),
+        ),
+        ChangeNotifierProvider(
           create: (_) => di.locator<WatchlistNotifier>(),
         ),
       ],
@@ -108,6 +113,9 @@ class MyApp extends StatelessWidget {
               return CupertinoPageRoute(builder: (_) => const SearchPage());
             case WatchlistPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => const WatchlistPage());
+            case AiringTodayTvSeriesPage.ROUTE_NAME:
+              return CupertinoPageRoute(
+                  builder: (_) => const AiringTodayTvSeriesPage());
             case PopularTvSeriesPage.ROUTE_NAME:
               return CupertinoPageRoute(
                   builder: (_) => const PopularTvSeriesPage());
