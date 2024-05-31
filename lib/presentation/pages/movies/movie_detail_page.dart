@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:submission_flutter_expert/common/constants.dart';
 import 'package:submission_flutter_expert/domain/entities/genre.dart';

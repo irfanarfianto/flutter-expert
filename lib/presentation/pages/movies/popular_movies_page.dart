@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/presentation/provider/movies/popular_movies_notifier.dart';
 import 'package:submission_flutter_expert/presentation/widgets/movie_card_list.dart';

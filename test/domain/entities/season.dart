@@ -43,7 +43,7 @@ void main() {
     });
 
     test('should properly implement == and hashCode', () {
-      final tSeasonCopy = Season(
+      const tSeasonCopy = Season(
         id: 1,
         seasonNumber: 1,
         episodes: [tEpisode1, tEpisode2],
