@@ -1,10 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/popular_movies_notifier.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/popular_movies/popular_movies_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/popular_movies/popular_movies_event.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/popular_movies/popular_movies_state.dart';
 import 'package:submission_flutter_expert/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PopularMoviesPage extends StatefulWidget {
   static const ROUTE_NAME = '/popular-movie';
@@ -19,15 +19,15 @@ class _PopularMoviesPageState extends State<PopularMoviesPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<PopularMoviesNotifier>(context, listen: false)
-            .fetchPopularMovies());
+    Future.microtask(() {
+      final popularMoviesBloc = context.read<PopularMoviesBloc>();
+      popularMoviesBloc.add(FetchPopularMovies());
+    });
   }
 
   Future<void> _refresh() async {
-    await Future.delayed(const Duration(seconds: 3));
-    await Provider.of<PopularMoviesNotifier>(context, listen: false)
-        .fetchPopularMovies();
+    final popularMoviesBloc = context.read<PopularMoviesBloc>();
+    popularMoviesBloc.add(FetchPopularMovies());
   }
 
   @override
@@ -40,29 +40,29 @@ class _PopularMoviesPageState extends State<PopularMoviesPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Consumer<PopularMoviesNotifier>(
-            builder: (context, data, child) {
-              if (data.state == RequestState.Loading) {
+          child: BlocBuilder<PopularMoviesBloc, PopularMoviesState>(
+            builder: (context, state) {
+              if (state.state == RequestState.Loading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              } else if (data.state == RequestState.Loaded) {
+              } else if (state.state == RequestState.Loaded) {
                 return RefreshIndicator(
                   onRefresh: _refresh,
                   child: Scrollbar(
                     child: ListView.builder(
                       itemBuilder: (context, index) {
-                        final movie = data.movies[index];
+                        final movie = state.movies[index];
                         return MovieCard(movie);
                       },
-                      itemCount: data.movies.length,
+                      itemCount: state.movies.length,
                     ),
                   ),
                 );
               } else {
                 return Center(
                   key: const Key('error_message'),
-                  child: Text(data.message),
+                  child: Text(state.message),
                 );
               }
             },

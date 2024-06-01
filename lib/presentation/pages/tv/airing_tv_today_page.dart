@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
@@ -28,6 +26,7 @@ class _AiringTodayTvSeriesPageState extends State<AiringTodayTvSeriesPage> {
 
   Future<void> _refresh() async {
     await Future.delayed(const Duration(seconds: 3));
+    // ignore: use_build_context_synchronously
     await Provider.of<AiringTodayTvSeriesNotifier>(context, listen: false)
         .fetchAiringTodayTvSeries();
   }

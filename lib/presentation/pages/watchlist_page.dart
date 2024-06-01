@@ -1,11 +1,13 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/common/utils.dart';
 import 'package:submission_flutter_expert/domain/entities/movie.dart';
 import 'package:submission_flutter_expert/domain/entities/tv.dart';
-import 'package:submission_flutter_expert/presentation/provider/watchlist_notifier.dart';
+import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_event.dart';
+import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_state.dart';
 import 'package:submission_flutter_expert/presentation/widgets/movie_card_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:submission_flutter_expert/presentation/widgets/tv_series_card.dart';
 
 class WatchlistPage extends StatefulWidget {
@@ -21,9 +23,9 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() =>
-        Provider.of<WatchlistNotifier>(context, listen: false)
-            .fetchWatchlist());
+    Future.microtask(() {
+      context.read<WatchlistBloc>().add(FetchWatchlist());
+    });
   }
 
   @override
@@ -34,7 +36,7 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
 
   @override
   void didPopNext() {
-    Provider.of<WatchlistNotifier>(context, listen: false).fetchWatchlist();
+    context.read<WatchlistBloc>().add(FetchWatchlist());
   }
 
   @override
@@ -47,16 +49,16 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Consumer<WatchlistNotifier>(
-            builder: (context, data, child) {
-              if (data.watchlistState == RequestState.Loading) {
+          child: BlocBuilder<WatchlistBloc, WatchlistState>(
+            builder: (context, state) {
+              if (state.watchlistState == RequestState.Loading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              } else if (data.watchlistState == RequestState.Loaded) {
+              } else if (state.watchlistState == RequestState.Loaded) {
                 return ListView.builder(
                   itemBuilder: (context, index) {
-                    final item = data.watchlist[index];
+                    final item = state.watchlist[index];
                     if (item is Movie) {
                       return MovieCard(item);
                     } else if (item is TvSeries) {
@@ -65,12 +67,12 @@ class _WatchlistPageState extends State<WatchlistPage> with RouteAware {
                       return const SizedBox.shrink();
                     }
                   },
-                  itemCount: data.watchlist.length,
+                  itemCount: state.watchlist.length,
                 );
               } else {
                 return Center(
                   key: const Key('error_message'),
-                  child: Text(data.message),
+                  child: Text(state.message),
                 );
               }
             },

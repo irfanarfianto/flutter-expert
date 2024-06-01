@@ -1,5 +1,12 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:submission_flutter_expert/common/constants.dart';
 import 'package:submission_flutter_expert/common/utils.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/movie_detail/movie_detail_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/movie_list/movie_list_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/movie_search/movie_search_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/popular_movies/popular_movies_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/movies/top_rated_movies/top_rated_movies_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_bloc.dart';
 import 'package:submission_flutter_expert/presentation/pages/about_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/home_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/movies/movie_detail_page.dart';
@@ -12,12 +19,6 @@ import 'package:submission_flutter_expert/presentation/pages/tv/top_rated_tv_ser
 import 'package:submission_flutter_expert/presentation/pages/tv/tv_series_detail_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/watchlist_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/watchlist_page.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/movie_detail_notifier.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/movie_list_notifier.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/movie_search_notifier.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/popular_movies_notifier.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/top_rated_movies_notifier.dart';
-import 'package:submission_flutter_expert/presentation/provider/movies/watchlist_movie_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/airing_today_tv_series_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
 import 'package:submission_flutter_expert/presentation/provider/tv/tv_list_notifier.dart';
@@ -43,23 +44,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieListNotifier>(),
+        BlocProvider(
+          create: (_) => di.locator<MovieListBloc>(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieDetailNotifier>(),
+        BlocProvider(
+          create: (_) => di.locator<MovieDetailBloc>(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<MovieSearchNotifier>(),
+        BlocProvider(
+          create: (_) => di.locator<MovieSearchBloc>(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<TopRatedMoviesNotifier>(),
+        BlocProvider(
+          create: (_) => di.locator<TopRatedMoviesBloc>(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<PopularMoviesNotifier>(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => di.locator<WatchlistMovieNotifier>(),
+        BlocProvider(
+          create: (_) => di.locator<PopularMoviesBloc>(),
         ),
         ChangeNotifierProvider(
           create: (_) => di.locator<TvListNotifier>(),
@@ -85,6 +83,28 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => di.locator<WatchlistNotifier>(),
         ),
+        // bloc
+        // BlocProvider(
+        //   create: (_) => di.locator<AiringTodayTvSeriesBloc>(),
+        // ),
+        // BlocProvider(
+        //   create: (_) => di.locator<TvDetailBloc>(),
+        // ),
+        // BlocProvider(
+        //   create: (_) => di.locator<TvListBloc>(),
+        // ),
+        // BlocProvider(
+        //   create: (_) => di.locator<TvSeriesSearchBloc>(),
+        // ),
+        BlocProvider(
+          create: (_) => di.locator<WatchlistBloc>(),
+        ),
+        // BlocProvider(
+        //   create: (_) => di.locator<PopularTvSeriesBloc>(),
+        // ),
+        // BlocProvider(
+        //   create: (_) => di.locator<TopRatedTvSeriesBloc>(),
+        // ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
