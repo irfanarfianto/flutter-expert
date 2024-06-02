@@ -20,11 +20,14 @@ void main() {
 
   setUp(() {
     mockBloc = MockWatchlistBloc();
+
+    when(mockBloc.stream)
+        .thenAnswer((_) => const Stream<WatchlistState>.empty());
   });
 
   Widget makeTestableWidget(Widget body) {
-    return BlocProvider<WatchlistBloc>.value(
-      value: mockBloc,
+    return BlocProvider<WatchlistBloc>(
+      create: (_) => mockBloc,
       child: MaterialApp(
         home: body,
       ),
@@ -36,7 +39,9 @@ void main() {
       watchlistState: RequestState.Loading,
     ));
 
-    await tester.pumpWidget(makeTestableWidget(const WatchlistPage()));
+    await tester.pumpWidget(makeTestableWidget(
+      const WatchlistPage(),
+    ));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });

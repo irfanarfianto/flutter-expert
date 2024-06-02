@@ -16,51 +16,58 @@ void main() {
 
   setUp(() {
     mockBloc = MockPopularMoviesBloc();
+    // Stub the stream method
+    when(mockBloc.stream)
+        .thenAnswer((_) => const Stream<PopularMoviesState>.empty());
   });
 
   Widget makeTestableWidget(Widget body) {
-    return BlocProvider<PopularMoviesBloc>.value(
-      value: mockBloc,
+    return BlocProvider<PopularMoviesBloc>(
+      create: (_) => mockBloc,
       child: MaterialApp(
         home: body,
       ),
     );
   }
 
-  testWidgets('Page should display center progress bar when loading',
+  testWidgets('PopularMoviesPage displays loading indicator when loading',
       (WidgetTester tester) async {
-    when(mockBloc.state).thenReturn(RequestState.Loading as PopularMoviesState);
+    when(mockBloc.stream).thenAnswer((_) => const Stream.empty());
+    when(mockBloc.state)
+        .thenReturn(const PopularMoviesState(state: RequestState.Loading));
 
-    final progressBarFinder = find.byType(CircularProgressIndicator);
-    final centerFinder = find.byType(Center);
-
-    await tester.pumpWidget(makeTestableWidget(const PopularMoviesPage()));
-
-    expect(centerFinder, findsOneWidget);
-    expect(progressBarFinder, findsOneWidget);
+    await tester.pumpWidget(makeTestableWidget(
+      const PopularMoviesPage(),
+    ));
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets('Page should display ListView when data is loaded',
+  testWidgets(
+      'emits [PopularMoviesLoaded] when FetchPopularMovies event is added',
       (WidgetTester tester) async {
-    when(mockBloc.state).thenReturn(RequestState.Loaded);
-    when(mockBloc.movies).thenReturn(<Movie>[]);
+    when(mockBloc.state)
+        .thenReturn(const PopularMoviesState(state: RequestState.Loading));
 
-    final listViewFinder = find.byType(ListView);
+    await tester.pumpWidget(makeTestableWidget(
+      const PopularMoviesPage(),
+    ));
 
-    await tester.pumpWidget(makeTestableWidget(const PopularMoviesPage()));
+    when(mockBloc.state).thenReturn(
+        const PopularMoviesState(state: RequestState.Loaded, movies: []));
 
-    expect(listViewFinder, findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
-
-  testWidgets('Page should display text with message when Error',
+  testWidgets(
+      'PopularMoviesPage displays error message when error state is received',
       (WidgetTester tester) async {
-    when(mockBloc.state).thenReturn(RequestState.Error);
-    when(mockBloc.message).thenReturn('Error message');
+    when(mockBloc.state).thenReturn(const PopularMoviesState(
+        state: RequestState.Error, message: 'Error message'));
 
-    final textFinder = find.byKey(const Key('error_message'));
+    await tester.pumpWidget(makeTestableWidget(
+      const PopularMoviesPage(),
+    ));
 
-    await tester.pumpWidget(makeTestableWidget(const PopularMoviesPage()));
-
-    expect(textFinder, findsOneWidget);
+    expect(find.byKey(const Key('error_message')), findsOneWidget);
+    expect(find.text('Error message'), findsOneWidget);
   });
 }

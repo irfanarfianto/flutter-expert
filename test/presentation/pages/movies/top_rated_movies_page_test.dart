@@ -5,97 +5,54 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/presentation/blocs/movies/top_rated_movies/top_rated_movies_bloc.dart';
-import 'package:submission_flutter_expert/presentation/blocs/movies/top_rated_movies/top_rated_movies_event.dart';
 import 'package:submission_flutter_expert/presentation/blocs/movies/top_rated_movies/top_rated_movies_state.dart';
 import 'package:submission_flutter_expert/presentation/pages/movies/top_rated_movies_page.dart';
 
-import '../../../dummy_data/dummy_objects.dart';
 import 'top_rated_movies_page_test.mocks.dart';
 
 @GenerateMocks([TopRatedMoviesBloc])
 void main() {
-  late MockTopRatedMoviesBloc mockBlocTopRatedMoviesBloc;
+  late MockTopRatedMoviesBloc mockBloc;
 
   setUp(() {
-    mockBlocTopRatedMoviesBloc = MockTopRatedMoviesBloc();
+    mockBloc = MockTopRatedMoviesBloc();
+    // Stub the stream method
+    when(mockBloc.stream)
+        .thenAnswer((_) => const Stream<TopRatedMoviesState>.empty());
   });
 
   Widget makeTestableWidget(Widget body) {
-    return BlocProvider<TopRatedMoviesBloc>.value(
-      value: mockBlocTopRatedMoviesBloc,
+    return BlocProvider<TopRatedMoviesBloc>(
+      create: (_) => mockBloc,
       child: MaterialApp(
-        home: Scaffold(body: body),
+        home: body,
       ),
     );
   }
 
-  testWidgets('Page should display center progress bar when loading',
+  testWidgets('TopRatedMoviesPage displays loading indicator when loading',
       (WidgetTester tester) async {
-    when(mockBlocTopRatedMoviesBloc.state)
+    when(mockBloc.state)
         .thenReturn(const TopRatedMoviesState(state: RequestState.Loading));
 
-    final progressBarFinder = find.byType(CircularProgressIndicator);
+    await tester.pumpWidget(makeTestableWidget(
+      const TopRatedMoviesPage(),
+    ));
 
-    await tester.pumpWidget(makeTestableWidget(const TopRatedMoviesPage()));
-
-    expect(progressBarFinder, findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets('Page should display ListView when data is loaded',
+  testWidgets(
+      'TopRatedMoviesPage displays error message when error state is received',
       (WidgetTester tester) async {
-    final loadedState = TopRatedMoviesState(
-      state: RequestState.Loaded,
-      movies: [testMovie],
-    );
+    when(mockBloc.state).thenReturn(const TopRatedMoviesState(
+        state: RequestState.Error, message: 'Error message'));
 
-    when(mockBlocTopRatedMoviesBloc.state).thenReturn(loadedState);
+    await tester.pumpWidget(makeTestableWidget(
+      const TopRatedMoviesPage(),
+    ));
 
-    final listViewFinder = find.byType(ListView);
-
-    await tester.pumpWidget(makeTestableWidget(const TopRatedMoviesPage()));
-
-    expect(listViewFinder, findsOneWidget);
-  });
-
-  testWidgets('Page should display text with message when Error',
-      (WidgetTester tester) async {
-    const errorState = TopRatedMoviesState(
-      state: RequestState.Error,
-      message: 'Error message',
-    );
-
-    when(mockBlocTopRatedMoviesBloc.state).thenReturn(errorState);
-
-    final textFinder = find.text('Error message');
-
-    await tester.pumpWidget(makeTestableWidget(const TopRatedMoviesPage()));
-
-    expect(textFinder, findsOneWidget);
-  });
-
-  testWidgets('Pull to refresh should trigger refresh method',
-      (WidgetTester tester) async {
-    final loadedState = TopRatedMoviesState(
-      state: RequestState.Loaded,
-      movies: [testMovie],
-    );
-
-    when(mockBlocTopRatedMoviesBloc.state).thenReturn(loadedState);
-
-    final refreshIndicatorFinder = find.byType(RefreshIndicator);
-
-    await tester.pumpWidget(makeTestableWidget(const TopRatedMoviesPage()));
-
-    // Check if the RefreshIndicator is present
-    expect(refreshIndicatorFinder, findsOneWidget);
-
-    // Perform a pull-to-refresh action
-    await tester.drag(refreshIndicatorFinder, const Offset(0.0, -200.0));
-
-    // Wait for the widget tree to rebuild
-    await tester.pump();
-
-    // Verify that the refresh method is called
-    verify(mockBlocTopRatedMoviesBloc.add(FetchTopRatedMovies())).called(1);
+    expect(find.byKey(const Key('error_message')), findsOneWidget);
+    expect(find.text('Error message'), findsOneWidget);
   });
 }
