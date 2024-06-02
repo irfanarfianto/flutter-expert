@@ -56,6 +56,11 @@ class SearchPage extends StatelessWidget {
                     );
                   } else if (state.state == RequestState.Loaded) {
                     final result = state.searchResult;
+                    if (result.isEmpty) {
+                      return const Center(
+                        child: Text('No movies found.'),
+                      );
+                    }
                     return Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.all(8),
@@ -84,7 +89,6 @@ class SearchPage extends StatelessWidget {
                 style: kHeading6,
               ),
               BlocBuilder<TvSeriesSearchBloc, TvSeriesSearchState>(
-                // Consumer untuk TvSearchNotifier
                 builder: (context, state) {
                   if (state.state == RequestState.Loading) {
                     return const Center(
@@ -92,6 +96,11 @@ class SearchPage extends StatelessWidget {
                     );
                   } else if (state.state == RequestState.Loaded) {
                     final result = state.searchResult;
+                    if (result.isEmpty) {
+                      return const Center(
+                        child: Text('No TV series found.'),
+                      );
+                    }
                     return Expanded(
                       child: ListView.builder(
                         padding: const EdgeInsets.all(8),
