@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
-import 'package:submission_flutter_expert/presentation/provider/tv/top_rated_tv_series_notifier.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/top_rated_tv_series/top_rated_tv_series_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/top_rated_tv_series/top_rated_tv_series_event.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/top_rated_tv_series/top_rated_tv_series_state.dart';
 import 'package:submission_flutter_expert/presentation/widgets/tv_series_card.dart';
 
 class TopRatedTvSeriesPage extends StatefulWidget {
@@ -17,10 +19,15 @@ class _TopRatedTvSeriesPageState extends State<TopRatedTvSeriesPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      Provider.of<TopRatedTvSeriesNotifier>(context, listen: false)
-          .fetchTopRatedTvSeries();
-    });
+    Future.microtask(
+      () => context.read<TopRatedTvSeriesBloc>().add(FetchTopRatedTvSeries()),
+    );
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(seconds: 3));
+    // ignore: use_build_context_synchronously
+    context.read<TopRatedTvSeriesBloc>().add(FetchTopRatedTvSeries());
   }
 
   @override
@@ -33,26 +40,29 @@ class _TopRatedTvSeriesPageState extends State<TopRatedTvSeriesPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Consumer<TopRatedTvSeriesNotifier>(
-            builder: (context, data, child) {
-              if (data.state == RequestState.Loading) {
+          child: BlocBuilder<TopRatedTvSeriesBloc, TopRatedTvSeriesState>(
+            builder: (context, state) {
+              if (state.state == RequestState.Loading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              } else if (data.state == RequestState.Loaded) {
-                return Scrollbar(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) {
-                      final tvSeries = data.tvSeries[index];
-                      return TvSeriesCard(tvSeries);
-                    },
-                    itemCount: data.tvSeries.length,
+              } else if (state.state == RequestState.Loaded) {
+                return RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        final tvSeries = state.tvSeries[index];
+                        return TvSeriesCard(tvSeries);
+                      },
+                      itemCount: state.tvSeries.length,
+                    ),
                   ),
                 );
               } else {
                 return Center(
                   key: const Key('error_message'),
-                  child: Text(data.message),
+                  child: Text(state.message),
                 );
               }
             },

@@ -26,5 +26,5 @@ class AiringTodayTvSeriesState extends Equatable {
   }
 
   @override
-  List<Object> get props => [state, tvSeries, message];
+  List<Object?> get props => [state, tvSeries, message];
 }

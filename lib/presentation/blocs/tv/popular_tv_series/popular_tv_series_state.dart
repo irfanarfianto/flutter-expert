@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/tv.dart';
 
-
 class PopularTvSeriesState extends Equatable {
   final RequestState state;
   final List<TvSeries> tvSeries;
@@ -27,5 +26,5 @@ class PopularTvSeriesState extends Equatable {
   }
 
   @override
-  List<Object> get props => [state, tvSeries, message];
+  List<Object?> get props => [state, tvSeries, message];
 }

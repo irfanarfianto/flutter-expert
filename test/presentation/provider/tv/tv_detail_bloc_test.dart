@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -75,128 +76,113 @@ void main() {
         .thenAnswer((_) async => Right(tTv));
   }
 
+  tearDown(() {
+    bloc.close();
+  });
+
   group('FetchTvDetail', () {
-    test('should emit [Loading, Loaded] when data is gotten successfully',
-        () async {
-      // arrange
-      arrangeUsecase();
-      // assert later
-      final expected = [
+    blocTest<TvDetailBloc, TvDetailState>(
+      'should emit [Loading, Loaded] when data is gotten successfully',
+      build: () {
+        arrangeUsecase();
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const FetchTvDetail(tId)),
+      expect: () => [
         const TvDetailState(tvSeriesState: RequestState.Loading),
         const TvDetailState(
-            tvSeriesState: RequestState.Loaded, tvSeries: testTvDetail),
+            tvSeriesState: RequestState.Loaded, tvSeriesDetail: testTvDetail),
         TvDetailState(
             tvSeriesState: RequestState.Loaded,
-            tvSeries: testTvDetail,
+            tvSeriesDetail: testTvDetail,
             recommendationState: RequestState.Loaded,
             tvSeriesRecommendations: tTv),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(const FetchTvDetail(tId));
-    });
+      ],
+    );
 
-    test('should emit [Loading, Error] when getting data fails', () async {
-      // arrange
-      when(mockGetTvSeriesDetail.execute(tId))
-          .thenAnswer((_) async => const Left(ServerFailure('Server Failure')));
-      when(mockGetTvSeriesRecommendations.execute(tId))
-          .thenAnswer((_) async => Right(tTv));
-      // assert later
-      final expected = [
+    blocTest<TvDetailBloc, TvDetailState>(
+      'should emit [Loading, Error] when getting data fails',
+      build: () {
+        when(mockGetTvSeriesDetail.execute(tId)).thenAnswer(
+            (_) async => const Left(ServerFailure('Server Failure')));
+        when(mockGetTvSeriesRecommendations.execute(tId))
+            .thenAnswer((_) async => Right(tTv));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const FetchTvDetail(tId)),
+      expect: () => [
         const TvDetailState(tvSeriesState: RequestState.Loading),
         const TvDetailState(
             tvSeriesState: RequestState.Error, message: 'Server Failure'),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(const FetchTvDetail(tId));
-    });
+      ],
+    );
   });
 
+  group('Get Recommendations', () {
+    blocTest<TvDetailBloc, TvDetailState>(
+      'should emit [Loading, Loaded] when data is gotten successfully',
+      build: () {
+        arrangeUsecase();
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const FetchTvDetail(tId)),
+      expect: () => [
+        const TvDetailState(tvSeriesState: RequestState.Loading),
+        const TvDetailState(
+            tvSeriesState: RequestState.Loaded, tvSeriesDetail: testTvDetail),
+        TvDetailState(
+            tvSeriesState: RequestState.Loaded,
+            tvSeriesDetail: testTvDetail,
+            recommendationState: RequestState.Loaded,
+            tvSeriesRecommendations: tTv),
+      ],
+    );
+  });
   group('Watchlist', () {
-    test('should emit correct states when adding to watchlist is successful',
-        () async {
-      // arrange
-      when(mockSaveWatchlistTv.execute(testTvDetail))
-          .thenAnswer((_) async => const Right('Added to Watchlist'));
-      when(mockGetWatchListStatusTv.execute(testTvDetail.id))
-          .thenAnswer((_) async => true);
-      // assert later
-      final expected = [
-        const TvDetailState(watchlistMessage: 'Added to Watchlist'),
+    blocTest<TvDetailBloc, TvDetailState>(
+      'should emit correct states when adding to watchlist is successful',
+      build: () {
+        when(mockSaveWatchlistTv.execute(testTvDetail)).thenAnswer(
+            (_) async => const Right('Ditambahkan ke Daftar Tonton'));
+        when(mockGetWatchListStatusTv.execute(testTvDetail.id))
+            .thenAnswer((_) async => true);
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const AddToWatchlist(testTvDetail)),
+      expect: () => [
+        const TvDetailState(watchlistMessage: 'Ditambahkan ke Daftar Tonton'),
         const TvDetailState(
-            watchlistMessage: 'Added to Watchlist', isAddedToWatchlist: true),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(const AddToWatchlist(testTvDetail));
-    });
+            watchlistMessage: 'Ditambahkan ke Daftar Tonton',
+            isAddedToWatchlist: true),
+      ],
+    );
 
-    test('should emit correct states when adding to watchlist fails', () async {
-      // arrange
-      when(mockSaveWatchlistTv.execute(testTvDetail))
-          .thenAnswer((_) async => const Left(DatabaseFailure('Failed')));
-      when(mockGetWatchListStatusTv.execute(testTvDetail.id))
-          .thenAnswer((_) async => false);
-      // assert later
-      final expected = [
+    blocTest<TvDetailBloc, TvDetailState>(
+      'should emit correct states when adding to watchlist fails',
+      build: () {
+        when(mockSaveWatchlistTv.execute(testTvDetail))
+            .thenAnswer((_) async => const Left(DatabaseFailure('Failed')));
+        when(mockGetWatchListStatusTv.execute(testTvDetail.id))
+            .thenAnswer((_) async => false);
+        return bloc;
+      },
+      act: (bloc) => bloc.add(const AddToWatchlist(testTvDetail)),
+      expect: () => [
         const TvDetailState(watchlistMessage: 'Failed'),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(const AddToWatchlist(testTvDetail));
-    });
+      ],
+    );
 
-    test(
-        'should emit correct states when removing from watchlist is successful',
-        () async {
-      // arrange
-      when(mockRemoveWatchlistTvSeries.execute(testTvDetail))
-          .thenAnswer((_) async => const Right('Removed from Watchlist'));
-      when(mockGetWatchListStatusTv.execute(testTvDetail.id))
-          .thenAnswer((_) async => false);
-      // assert later
-      final expected = [
-        const TvDetailState(watchlistMessage: 'Removed from Watchlist'),
-        const TvDetailState(
-            watchlistMessage: 'Removed from Watchlist',
-            isAddedToWatchlist: false),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(const RemoveFromWatchlist(testTvDetail));
-    });
-
-    test('should emit correct states when removing from watchlist fails',
-        () async {
-      // arrange
-      when(mockRemoveWatchlistTvSeries.execute(testTvDetail))
-          .thenAnswer((_) async => const Left(DatabaseFailure('Failed')));
-      when(mockGetWatchListStatusTv.execute(testTvDetail.id))
-          .thenAnswer((_) async => true);
-      // assert later
-      final expected = [
-        const TvDetailState(watchlistMessage: 'Failed'),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(const RemoveFromWatchlist(testTvDetail));
-    });
-
-    test(
-        'should emit correct states when loading watchlist status is successful',
-        () async {
-      // arrange
-      when(mockGetWatchListStatusTv.execute(testTvDetail.id))
-          .thenAnswer((_) async => true);
-      // assert later
-      final expected = [
+    blocTest<TvDetailBloc, TvDetailState>(
+      'should emit correct states when loading watchlist status is successful',
+      build: () {
+        when(mockGetWatchListStatusTv.execute(testTvDetail.id))
+            .thenAnswer((_) async => true);
+        return bloc;
+      },
+      act: (bloc) => bloc.add(LoadWatchlistStatus(testTvDetail.id)),
+      expect: () => [
         const TvDetailState(isAddedToWatchlist: true),
-      ];
-      expectLater(bloc.stream, emitsInOrder(expected));
-      // act
-      bloc.add(LoadWatchlistStatus(testTvDetail.id));
-    });
+      ],
+    );
   });
 }

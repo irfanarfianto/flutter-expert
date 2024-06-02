@@ -7,8 +7,7 @@ import 'movie_search_state.dart';
 class MovieSearchBloc extends Bloc<MovieSearchEvent, MovieSearchState> {
   final SearchMovies searchMovies;
 
-  MovieSearchBloc({required this.searchMovies})
-      : super(const MovieSearchState()) {
+  MovieSearchBloc(this.searchMovies) : super(const MovieSearchState()) {
     on<FetchMovieSearch>((event, emit) async {
       emit(state.copyWith(state: RequestState.Loading));
 

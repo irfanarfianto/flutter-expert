@@ -1,3 +1,4 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -39,40 +40,41 @@ void main() {
     voteAverage: 1,
     voteCount: 1,
   );
-
   final tTvSeriesList = <TvSeries>[tTvSeries];
 
-  test('should change state to loading when usecase is called', () async {
-    // arrange
-    when(mockGetNowPlayingTvSeries.execute())
-        .thenAnswer((_) async => Right(tTvSeriesList));
-    // act
-    bloc.add(FetchAiringTodayTvSeries());
-    // assert
-    await expectLater(
-      bloc.stream,
-      emitsInOrder([
-        emits(const AiringTodayTvSeriesState(state: RequestState.Loading)),
-        emits(AiringTodayTvSeriesState(
-            state: RequestState.Loaded, tvSeries: tTvSeriesList)),
-      ]),
+  group('Airing Today TvSeries Bloc', () {
+    blocTest<AiringTodayTvSeriesBloc, AiringTodayTvSeriesState>(
+      'emits [Loading, Loaded] when FetchAiringTodayTvSeries is successful',
+      build: () {
+        when(mockGetNowPlayingTvSeries.execute())
+            .thenAnswer((_) async => Right(tTvSeriesList));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(FetchAiringTodayTvSeries()),
+      expect: () => [
+        const AiringTodayTvSeriesState(state: RequestState.Loading),
+        AiringTodayTvSeriesState(
+          state: RequestState.Loaded,
+          tvSeries: tTvSeriesList,
+        ),
+      ],
     );
-  });
 
-  test('should return error when data is unsuccessful', () async {
-    // arrange
-    when(mockGetNowPlayingTvSeries.execute())
-        .thenAnswer((_) async => const Left(ServerFailure('Server Failure')));
-    // act
-    bloc.add(FetchAiringTodayTvSeries());
-    // assert
-    await expectLater(
-      bloc.stream,
-      emitsInOrder([
-        emits(const AiringTodayTvSeriesState(state: RequestState.Loading)),
-        emits(const AiringTodayTvSeriesState(
-            state: RequestState.Error, message: 'Server Failure')),
-      ]),
+    blocTest<AiringTodayTvSeriesBloc, AiringTodayTvSeriesState>(
+      'emits [Loading, Error] when FetchAiringTodayTvSeries is unsuccessful',
+      build: () {
+        when(mockGetNowPlayingTvSeries.execute()).thenAnswer(
+            (_) async => const Left(ServerFailure('Server Failure')));
+        return bloc;
+      },
+      act: (bloc) => bloc.add(FetchAiringTodayTvSeries()),
+      expect: () => [
+        const AiringTodayTvSeriesState(state: RequestState.Loading),
+        const AiringTodayTvSeriesState(
+          state: RequestState.Error,
+          message: 'Server Failure',
+        ),
+      ],
     );
   });
 }

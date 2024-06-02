@@ -8,24 +8,20 @@ class PopularTvSeriesBloc
     extends Bloc<PopularTvSeriesEvent, PopularTvSeriesState> {
   final GetPopularTvSeries getPopularTvSeries;
 
-  PopularTvSeriesBloc(this.getPopularTvSeries) : super(const PopularTvSeriesState());
-
-  Stream<PopularTvSeriesState> mapEventToState(
-      PopularTvSeriesEvent event) async* {
-    if (event is FetchPopularTvSeries) {
-      yield state.copyWith(state: RequestState.Loading);
+  PopularTvSeriesBloc(this.getPopularTvSeries)
+      : super(const PopularTvSeriesState()) {
+    on<FetchPopularTvSeries>((event, emit) async {
+      emit(state.copyWith(state: RequestState.Loading));
 
       final result = await getPopularTvSeries.execute();
-      yield* result.fold(
-        (failure) async* {
-          yield state.copyWith(
-              state: RequestState.Error, message: failure.message);
-        },
-        (tvSeriesData) async* {
-          yield state.copyWith(
-              state: RequestState.Loaded, tvSeries: tvSeriesData);
-        },
-      );
-    }
+
+      result.fold((failure) {
+        emit(state.copyWith(
+            state: RequestState.Error, message: failure.message));
+      }, (tvSeriesData) {
+        emit(
+            state.copyWith(state: RequestState.Loaded, tvSeries: tvSeriesData));
+      });
+    });
   }
 }

@@ -94,7 +94,6 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
           emit(state.copyWith(watchlistMessage: watchlistRemoveSuccessMessage));
         },
       );
-
       add(LoadWatchlistStatus(event.movie.id));
     });
   }

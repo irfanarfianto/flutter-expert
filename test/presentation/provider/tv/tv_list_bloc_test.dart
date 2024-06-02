@@ -15,8 +15,6 @@ import 'package:submission_flutter_expert/presentation/blocs/tv/tv_list/tv_list_
 
 import 'tv_list_bloc_test.mocks.dart';
 
-
-
 @GenerateMocks([GetNowPlayingTvSeries, GetPopularTvSeries, GetTopRatedTvSeries])
 void main() {
   late TvListBloc tvListBloc;
@@ -58,7 +56,11 @@ void main() {
     blocTest<TvListBloc, TvListState>(
       'initial state should be empty',
       build: () => tvListBloc,
-      verify: (bloc) => expect(bloc.state.onTheAirState, RequestState.Empty),
+      verify: (bloc) {
+        expect(bloc.state.nowPlayingState, RequestState.Empty);
+        expect(bloc.state.popularState, RequestState.Empty);
+        expect(bloc.state.topRatedState, RequestState.Empty);
+      },
     );
 
     blocTest<TvListBloc, TvListState>(
@@ -68,7 +70,7 @@ void main() {
             .thenAnswer((_) async => Right(tTvSeriesList));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchNowPlayingTv()),
+      act: (bloc) => bloc.add(FetchNowPlayingTvSeries()),
       verify: (bloc) {
         verify(mockGetNowPlayingTvSeries.execute());
       },
@@ -81,12 +83,12 @@ void main() {
             .thenAnswer((_) async => Right(tTvSeriesList));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchNowPlayingTv()),
+      act: (bloc) => bloc.add(FetchNowPlayingTvSeries()),
       expect: () => [
-        const TvListState(onTheAirState: RequestState.Loading),
+        const TvListState(nowPlayingState: RequestState.Loading),
         TvListState(
-          onTheAirState: RequestState.Loaded,
-          onTheAirTvSeries: tTvSeriesList,
+          nowPlayingState: RequestState.Loaded,
+          nowPlayingTvSeries: tTvSeriesList,
         ),
       ],
     );
@@ -98,11 +100,11 @@ void main() {
             (_) async => const Left(ServerFailure('Server Failure')));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchNowPlayingTv()),
+      act: (bloc) => bloc.add(FetchNowPlayingTvSeries()),
       expect: () => [
-        const TvListState(onTheAirState: RequestState.Loading),
+        const TvListState(nowPlayingState: RequestState.Loading),
         const TvListState(
-          onTheAirState: RequestState.Error,
+          nowPlayingState: RequestState.Error,
           message: 'Server Failure',
         ),
       ],
@@ -117,11 +119,11 @@ void main() {
             .thenAnswer((_) async => Right(tTvSeriesList));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchPopularTv()),
+      act: (bloc) => bloc.add(FetchPopularTvSeries()),
       expect: () => [
-        const TvListState(popularTvSeriesState: RequestState.Loading),
+        const TvListState(popularState: RequestState.Loading),
         TvListState(
-          popularTvSeriesState: RequestState.Loaded,
+          popularState: RequestState.Loaded,
           popularTvSeries: tTvSeriesList,
         ),
       ],
@@ -134,11 +136,11 @@ void main() {
             (_) async => const Left(ServerFailure('Server Failure')));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchPopularTv()),
+      act: (bloc) => bloc.add(FetchPopularTvSeries()),
       expect: () => [
-        const TvListState(popularTvSeriesState: RequestState.Loading),
+        const TvListState(popularState: RequestState.Loading),
         const TvListState(
-          popularTvSeriesState: RequestState.Error,
+          popularState: RequestState.Error,
           message: 'Server Failure',
         ),
       ],
@@ -153,11 +155,11 @@ void main() {
             .thenAnswer((_) async => Right(tTvSeriesList));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchTopRatedTv()),
+      act: (bloc) => bloc.add(FetchTopRatedTvSeries()),
       expect: () => [
-        const TvListState(topRatedTvSeriesState: RequestState.Loading),
+        const TvListState(topRatedState: RequestState.Loading),
         TvListState(
-          topRatedTvSeriesState: RequestState.Loaded,
+          topRatedState: RequestState.Loaded,
           topRatedTvSeries: tTvSeriesList,
         ),
       ],
@@ -170,11 +172,11 @@ void main() {
             (_) async => const Left(ServerFailure('Server Failure')));
         return tvListBloc;
       },
-      act: (bloc) => bloc.add(FetchTopRatedTv()),
+      act: (bloc) => bloc.add(FetchTopRatedTvSeries()),
       expect: () => [
-        const TvListState(topRatedTvSeriesState: RequestState.Loading),
+        const TvListState(topRatedState: RequestState.Loading),
         const TvListState(
-          topRatedTvSeriesState: RequestState.Error,
+          topRatedState: RequestState.Error,
           message: 'Server Failure',
         ),
       ],

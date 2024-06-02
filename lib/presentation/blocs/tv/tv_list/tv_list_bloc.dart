@@ -16,61 +16,64 @@ class TvListBloc extends Bloc<TvListEvent, TvListState> {
     required this.getPopularTvSeries,
     required this.getTopRatedTvSeries,
   }) : super(const TvListState()) {
-    on<FetchNowPlayingTv>(_fetchNowPlayingTv);
-    on<FetchPopularTv>(_fetchPopularTv);
-    on<FetchTopRatedTv>(_fetchTopRatedTv);
-  }
+    on<FetchNowPlayingTvSeries>((event, emit) async {
+      emit(state.copyWith(nowPlayingState: RequestState.Loading));
 
-  Future<void> _fetchNowPlayingTv(
-      FetchNowPlayingTv event, Emitter<TvListState> emit) async {
-    emit(state.copyWith(onTheAirState: RequestState.Loading));
-    final result = await getNowPlayingTvSeries.execute();
-    result.fold(
-      (failure) {
-        emit(state.copyWith(
-            onTheAirState: RequestState.Error, message: failure.message));
-      },
-      (tvSeriesData) {
-        emit(state.copyWith(
-            onTheAirState: RequestState.Loaded,
-            onTheAirTvSeries: tvSeriesData));
-      },
-    );
-  }
+      final result = await getNowPlayingTvSeries.execute();
+      result.fold(
+        (failure) {
+          emit(state.copyWith(
+            nowPlayingState: RequestState.Error,
+            message: failure.message,
+          ));
+        },
+        (tvSeriesData) {
+          emit(state.copyWith(
+            nowPlayingState: RequestState.Loaded,
+            nowPlayingTvSeries: tvSeriesData,
+          ));
+        },
+      );
+    });
 
-  Future<void> _fetchPopularTv(
-      FetchPopularTv event, Emitter<TvListState> emit) async {
-    emit(state.copyWith(popularTvSeriesState: RequestState.Loading));
-    final result = await getPopularTvSeries.execute();
-    result.fold(
-      (failure) {
-        emit(state.copyWith(
-            popularTvSeriesState: RequestState.Error,
-            message: failure.message));
-      },
-      (tvSeriesData) {
-        emit(state.copyWith(
-            popularTvSeriesState: RequestState.Loaded,
-            popularTvSeries: tvSeriesData));
-      },
-    );
-  }
+    on<FetchPopularTvSeries>((event, emit) async {
+      emit(state.copyWith(popularState: RequestState.Loading));
 
-  Future<void> _fetchTopRatedTv(
-      FetchTopRatedTv event, Emitter<TvListState> emit) async {
-    emit(state.copyWith(topRatedTvSeriesState: RequestState.Loading));
-    final result = await getTopRatedTvSeries.execute();
-    result.fold(
-      (failure) {
-        emit(state.copyWith(
-            topRatedTvSeriesState: RequestState.Error,
-            message: failure.message));
-      },
-      (tvSeriesData) {
-        emit(state.copyWith(
-            topRatedTvSeriesState: RequestState.Loaded,
-            topRatedTvSeries: tvSeriesData));
-      },
-    );
+      final result = await getPopularTvSeries.execute();
+      result.fold(
+        (failure) {
+          emit(state.copyWith(
+            popularState: RequestState.Error,
+            message: failure.message,
+          ));
+        },
+        (tvSeriesData) {
+          emit(state.copyWith(
+            popularState: RequestState.Loaded,
+            popularTvSeries: tvSeriesData,
+          ));
+        },
+      );
+    });
+
+    on<FetchTopRatedTvSeries>((event, emit) async {
+      emit(state.copyWith(topRatedState: RequestState.Loading));
+
+      final result = await getTopRatedTvSeries.execute();
+      result.fold(
+        (failure) {
+          emit(state.copyWith(
+            topRatedState: RequestState.Error,
+            message: failure.message,
+          ));
+        },
+        (tvSeriesData) {
+          emit(state.copyWith(
+            topRatedState: RequestState.Loaded,
+            topRatedTvSeries: tvSeriesData,
+          ));
+        },
+      );
+    });
   }
 }

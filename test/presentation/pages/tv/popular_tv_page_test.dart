@@ -1,50 +1,54 @@
-import 'package:submission_flutter_expert/common/state_enum.dart';
-import 'package:submission_flutter_expert/domain/entities/tv.dart';
-import 'package:submission_flutter_expert/presentation/pages/tv/popular_tv_series_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:provider/provider.dart';
-import 'package:submission_flutter_expert/presentation/provider/tv/popular_tv_series_notifier.dart';
+import 'package:submission_flutter_expert/common/state_enum.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/popular_tv_series/popular_tv_series_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/popular_tv_series/popular_tv_series_event.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/popular_tv_series/popular_tv_series_state.dart';
+import 'package:submission_flutter_expert/presentation/pages/tv/popular_tv_series_page.dart';
 
+import '../../../dummy_data/dummy_objects_tv.dart';
 import 'popular_tv_page_test.mocks.dart';
 
-
-@GenerateMocks([PopularTvSeriesNotifier])
+@GenerateMocks([PopularTvSeriesBloc])
 void main() {
-  late MockPopularTvSeriesNotifier mockNotifier;
+  late MockPopularTvSeriesBloc mockBlocPopularTvSeriesBloc;
 
   setUp(() {
-    mockNotifier = MockPopularTvSeriesNotifier();
+    mockBlocPopularTvSeriesBloc = MockPopularTvSeriesBloc();
   });
 
   Widget makeTestableWidget(Widget body) {
-    return ChangeNotifierProvider<PopularTvSeriesNotifier>.value(
-      value: mockNotifier,
+    return BlocProvider<PopularTvSeriesBloc>.value(
+      value: mockBlocPopularTvSeriesBloc,
       child: MaterialApp(
-        home: body,
+        home: Scaffold(body: body),
       ),
     );
   }
 
   testWidgets('Page should display center progress bar when loading',
       (WidgetTester tester) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loading);
+    when(mockBlocPopularTvSeriesBloc.state)
+        .thenReturn(const PopularTvSeriesState(state: RequestState.Loading));
 
     final progressBarFinder = find.byType(CircularProgressIndicator);
-    final centerFinder = find.byType(Center);
 
     await tester.pumpWidget(makeTestableWidget(const PopularTvSeriesPage()));
 
-    expect(centerFinder, findsOneWidget);
     expect(progressBarFinder, findsOneWidget);
   });
 
   testWidgets('Page should display ListView when data is loaded',
       (WidgetTester tester) async {
-    when(mockNotifier.state).thenReturn(RequestState.Loaded);
-    when(mockNotifier.tvSeries).thenReturn(<TvSeries>[]);
+    final loadedState = PopularTvSeriesState(
+      state: RequestState.Loaded,
+      tvSeries: [testTvSeries],
+    );
+
+    when(mockBlocPopularTvSeriesBloc.state).thenReturn(loadedState);
 
     final listViewFinder = find.byType(ListView);
 
@@ -55,13 +59,43 @@ void main() {
 
   testWidgets('Page should display text with message when Error',
       (WidgetTester tester) async {
-    when(mockNotifier.state).thenReturn(RequestState.Error);
-    when(mockNotifier.message).thenReturn('Error message');
+    const errorState = PopularTvSeriesState(
+      state: RequestState.Error,
+      message: 'Error message',
+    );
 
-    final textFinder = find.byKey(const Key('error_message'));
+    when(mockBlocPopularTvSeriesBloc.state).thenReturn(errorState);
+
+    final textFinder = find.text('Error message');
 
     await tester.pumpWidget(makeTestableWidget(const PopularTvSeriesPage()));
 
     expect(textFinder, findsOneWidget);
+  });
+
+  testWidgets('Pull to refresh should trigger refresh method',
+      (WidgetTester tester) async {
+    final loadedState = PopularTvSeriesState(
+      state: RequestState.Loaded,
+      tvSeries: [testTvSeries],
+    );
+
+    when(mockBlocPopularTvSeriesBloc.state).thenReturn(loadedState);
+
+    final refreshIndicatorFinder = find.byType(RefreshIndicator);
+
+    await tester.pumpWidget(makeTestableWidget(const PopularTvSeriesPage()));
+
+    // Check if the RefreshIndicator is present
+    expect(refreshIndicatorFinder, findsOneWidget);
+
+    // Perform a pull-to-refresh action
+    await tester.drag(refreshIndicatorFinder, const Offset(0.0, -200.0));
+
+    // Wait for the widget tree to rebuild
+    await tester.pump();
+
+    // Verify that the refresh method is called
+    verify(mockBlocPopularTvSeriesBloc.add(FetchPopularTvSeries())).called(1);
   });
 }

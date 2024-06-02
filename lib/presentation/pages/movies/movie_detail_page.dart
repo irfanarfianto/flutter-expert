@@ -335,7 +335,7 @@ class DetailContent extends StatelessWidget {
       result += '${genre.name}, ';
     }
 
-    if (result.isEmpty) {
+    if (result.isEmpty || result.trim() == '') {
       return result;
     }
 

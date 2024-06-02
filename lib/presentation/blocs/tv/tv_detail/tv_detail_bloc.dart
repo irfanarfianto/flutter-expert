@@ -25,27 +25,23 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState> {
     required this.saveWatchlist,
     required this.removeWatchlist,
   }) : super(const TvDetailState()) {
-    on<FetchTvDetail>(_onFetchTvDetail);
-    on<AddToWatchlist>(_onAddToWatchlist);
-    on<RemoveFromWatchlist>(_onRemoveFromWatchlist);
-    on<LoadWatchlistStatus>(_onLoadWatchlistStatus);
-  }
+    on<FetchTvDetail>((event, emit) async {
+      emit(state.copyWith(tvSeriesState: RequestState.Loading));
 
-  Future<void> _onFetchTvDetail(
-      FetchTvDetail event, Emitter<TvDetailState> emit) async {
-    emit(state.copyWith(tvSeriesState: RequestState.Loading));
+      final detailResult = await getTvDetail.execute(event.tvId);
+      final recommendationResult =
+          await getTvRecommendations.execute(event.tvId);
 
-    final detailResult = await getTvDetail.execute(event.id);
-    final recommendationResult = await getTvRecommendations.execute(event.id);
-
-    detailResult.fold(
-      (failure) {
+      detailResult.fold((failure) {
         emit(state.copyWith(
-            tvSeriesState: RequestState.Error, message: failure.message));
-      },
-      (tvSeries) async {
+          tvSeriesState: RequestState.Error,
+          message: failure.message,
+        ));
+      }, (tvSeries) {
         emit(state.copyWith(
-            tvSeriesState: RequestState.Loading, tvSeries: tvSeries));
+          tvSeriesState: RequestState.Loaded,
+          tvSeriesDetail: tvSeries,
+        ));
         recommendationResult.fold(
           (failure) {
             emit(state.copyWith(
@@ -59,50 +55,40 @@ class TvDetailBloc extends Bloc<TvDetailEvent, TvDetailState> {
             ));
           },
         );
-        emit(state.copyWith(tvSeriesState: RequestState.Loaded));
-      },
-    );
-  }
+      });
+    });
 
-  Future<void> _onAddToWatchlist(
-      AddToWatchlist event, Emitter<TvDetailState> emit) async {
-    final result = await saveWatchlist.execute(event.tvSeries);
+    on<LoadWatchlistStatus>((event, emit) async {
+      final result = await getWatchListStatus.execute(event.tvId);
+      emit(state.copyWith(isAddedToWatchlist: result));
+    });
 
-    result.fold(
-      (failure) {
-        emit(state.copyWith(watchlistMessage: failure.message));
-      },
-      (successMessage) {
-        emit(state.copyWith(watchlistMessage: successMessage));
-      },
-    );
+    on<AddToWatchlist>((event, emit) async {
+      final result = await saveWatchlist.execute(event.tvSeries);
 
-    await _loadWatchlistStatus(event.tvSeries.id, emit);
-  }
+      result.fold(
+        (failure) {
+          emit(state.copyWith(watchlistMessage: failure.message));
+        },
+        (successMessage) {
+          emit(state.copyWith(watchlistMessage: watchlistAddSuccessMessage));
+        },
+      );
+      add(LoadWatchlistStatus(event.tvSeries.id));
+    });
 
-  Future<void> _onRemoveFromWatchlist(
-      RemoveFromWatchlist event, Emitter<TvDetailState> emit) async {
-    final result = await removeWatchlist.execute(event.tvSeries);
+    on<RemoveFromWatchlist>((event, emit) async {
+      final result = await removeWatchlist.execute(event.tvSeries);
 
-    result.fold(
-      (failure) {
-        emit(state.copyWith(watchlistMessage: failure.message));
-      },
-      (successMessage) {
-        emit(state.copyWith(watchlistMessage: successMessage));
-      },
-    );
-
-    await _loadWatchlistStatus(event.tvSeries.id, emit);
-  }
-
-  Future<void> _onLoadWatchlistStatus(
-      LoadWatchlistStatus event, Emitter<TvDetailState> emit) async {
-    await _loadWatchlistStatus(event.id, emit);
-  }
-
-  Future<void> _loadWatchlistStatus(int id, Emitter<TvDetailState> emit) async {
-    final result = await getWatchListStatus.execute(id);
-    emit(state.copyWith(isAddedToWatchlist: result));
+      result.fold(
+        (failure) {
+          emit(state.copyWith(watchlistMessage: failure.message));
+        },
+        (successMessage) {
+          emit(state.copyWith(watchlistMessage: watchlistRemoveSuccessMessage));
+        },
+      );
+      add(LoadWatchlistStatus(event.tvSeries.id));
+    });
   }
 }

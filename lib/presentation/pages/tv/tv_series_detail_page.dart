@@ -1,15 +1,15 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:provider/provider.dart';
 import 'package:submission_flutter_expert/common/constants.dart';
 import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/genre.dart';
 import 'package:submission_flutter_expert/domain/entities/tv.dart';
 import 'package:submission_flutter_expert/domain/entities/tv_detail.dart';
-import 'package:submission_flutter_expert/presentation/provider/tv/tv_detail_notifier.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/tv_detail/tv_detail_bloc.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/tv_detail/tv_detail_event.dart';
+import 'package:submission_flutter_expert/presentation/blocs/tv/tv_detail/tv_detail_state.dart';
 
 class TvSeriesDetailPage extends StatefulWidget {
   static const ROUTE_NAME = '/tv_detail';
@@ -26,10 +26,8 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      Provider.of<TvDetailNotifier>(context, listen: false)
-          .fetchTvSeriesDetail(widget.id);
-      Provider.of<TvDetailNotifier>(context, listen: false)
-          .loadWatchlistStatus(widget.id);
+      context.read<TvDetailBloc>().add(FetchTvDetail(widget.id));
+      context.read<TvDetailBloc>().add(LoadWatchlistStatus(widget.id));
     });
   }
 
@@ -38,23 +36,23 @@ class _TvSeriesDetailPageState extends State<TvSeriesDetailPage> {
     return ScrollConfiguration(
       behavior: const ScrollBehavior().copyWith(overscroll: false),
       child: Scaffold(
-        body: Consumer<TvDetailNotifier>(
-          builder: (context, provider, child) {
-            if (provider.tvSeriesState == RequestState.Loading) {
+        body: BlocBuilder<TvDetailBloc, TvDetailState>(
+          builder: (context, state) {
+            if (state.tvSeriesState == RequestState.Loading) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (provider.tvSeriesState == RequestState.Loaded) {
-              final tvSeries = provider.tvSeries;
+            } else if (state.tvSeriesState == RequestState.Loaded) {
+              final tvSeries = state.tvSeriesDetail!;
               return SafeArea(
                 child: DetailContent(
                   tvSeries,
-                  provider.tvSeriesRecommendations,
-                  provider.isAddedToWatchlist,
+                  state.tvSeriesRecommendations,
+                  state.isAddedToWatchlist,
                 ),
               );
             } else {
-              return Text(provider.message);
+              return Text(state.message);
             }
           },
         ),
@@ -115,27 +113,25 @@ class DetailContent extends StatelessWidget {
                             ElevatedButton(
                               onPressed: () async {
                                 if (!isAddedWatchlist) {
-                                  await Provider.of<TvDetailNotifier>(
-                                    context,
-                                    listen: false,
-                                  ).addWatchlist(tvSeries);
+                                  context
+                                      .read<TvDetailBloc>()
+                                      .add(AddToWatchlist(tvSeries));
                                 } else {
-                                  await Provider.of<TvDetailNotifier>(
-                                    context,
-                                    listen: false,
-                                  ).removeFromWatchlist(tvSeries);
+                                  context
+                                      .read<TvDetailBloc>()
+                                      .add(RemoveFromWatchlist(tvSeries));
                                 }
 
-                                final message = Provider.of<TvDetailNotifier>(
-                                  context,
-                                  listen: false,
-                                ).watchlistMessage;
+                                final message = context
+                                    .read<TvDetailBloc>()
+                                    .state
+                                    .watchlistMessage;
 
                                 if (message ==
-                                        TvDetailNotifier
+                                        TvDetailBloc
                                             .watchlistAddSuccessMessage ||
                                     message ==
-                                        TvDetailNotifier
+                                        TvDetailBloc
                                             .watchlistRemoveSuccessMessage) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(message)));
@@ -240,17 +236,17 @@ class DetailContent extends StatelessWidget {
                               'Recommendations',
                               style: kHeading6,
                             ),
-                            Consumer<TvDetailNotifier>(
-                              builder: (context, data, child) {
-                                if (data.recommendationState ==
+                            BlocBuilder<TvDetailBloc, TvDetailState>(
+                              builder: (context, state) {
+                                if (state.recommendationState ==
                                     RequestState.Loading) {
                                   return const Center(
                                     child: CircularProgressIndicator(),
                                   );
-                                } else if (data.recommendationState ==
+                                } else if (state.recommendationState ==
                                     RequestState.Error) {
-                                  return Text(data.message);
-                                } else if (data.recommendationState ==
+                                  return Text(state.message);
+                                } else if (state.recommendationState ==
                                     RequestState.Loaded) {
                                   return SizedBox(
                                     height: 150,

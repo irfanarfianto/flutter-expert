@@ -9,24 +9,22 @@ class TopRatedTvSeriesBloc
   final GetTopRatedTvSeries getTopRatedTvSeries;
 
   TopRatedTvSeriesBloc(this.getTopRatedTvSeries)
-      : super(const TopRatedTvSeriesState());
+      : super(const TopRatedTvSeriesState()) {
+    on<FetchTopRatedTvSeries>(_onFetchTopRatedTvSeries);
+  }
 
-  Stream<TopRatedTvSeriesState> mapEventToState(
-      TopRatedTvSeriesEvent event) async* {
-    if (event is FetchTopRatedTvSeries) {
-      yield state.copyWith(state: RequestState.Loading);
+  Future<void> _onFetchTopRatedTvSeries(
+    FetchTopRatedTvSeries event,
+    Emitter<TopRatedTvSeriesState> emit,
+  ) async {
+    emit(state.copyWith(state: RequestState.Loading));
 
-      final result = await getTopRatedTvSeries.execute();
-      yield* result.fold(
-        (failure) async* {
-          yield state.copyWith(
-              state: RequestState.Error, message: failure.message);
-        },
-        (tvSeriesData) async* {
-          yield state.copyWith(
-              state: RequestState.Loaded, tvSeries: tvSeriesData);
-        },
-      );
-    }
+    final result = await getTopRatedTvSeries.execute();
+    result.fold(
+      (failure) => emit(
+          state.copyWith(state: RequestState.Error, message: failure.message)),
+      (tvSeriesData) => emit(
+          state.copyWith(state: RequestState.Loaded, tvSeries: tvSeriesData)),
+    );
   }
 }

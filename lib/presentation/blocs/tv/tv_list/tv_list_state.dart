@@ -3,53 +3,52 @@ import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/entities/tv.dart';
 
 class TvListState extends Equatable {
-  final List<TvSeries> onTheAirTvSeries;
-  final RequestState onTheAirState;
+  final List<TvSeries> nowPlayingTvSeries;
+  final RequestState nowPlayingState;
   final List<TvSeries> popularTvSeries;
-  final RequestState popularTvSeriesState;
+  final RequestState popularState;
   final List<TvSeries> topRatedTvSeries;
-  final RequestState topRatedTvSeriesState;
+  final RequestState topRatedState;
   final String message;
 
   const TvListState({
-    this.onTheAirTvSeries = const [],
-    this.onTheAirState = RequestState.Empty,
+    this.nowPlayingTvSeries = const [],
+    this.nowPlayingState = RequestState.Empty,
     this.popularTvSeries = const [],
-    this.popularTvSeriesState = RequestState.Empty,
+    this.popularState = RequestState.Empty,
     this.topRatedTvSeries = const [],
-    this.topRatedTvSeriesState = RequestState.Empty,
+    this.topRatedState = RequestState.Empty,
     this.message = '',
   });
 
   TvListState copyWith({
-    List<TvSeries>? onTheAirTvSeries,
-    RequestState? onTheAirState,
+    List<TvSeries>? nowPlayingTvSeries,
+    RequestState? nowPlayingState,
     List<TvSeries>? popularTvSeries,
-    RequestState? popularTvSeriesState,
+    RequestState? popularState,
     List<TvSeries>? topRatedTvSeries,
-    RequestState? topRatedTvSeriesState,
+    RequestState? topRatedState,
     String? message,
   }) {
     return TvListState(
-      onTheAirTvSeries: onTheAirTvSeries ?? this.onTheAirTvSeries,
-      onTheAirState: onTheAirState ?? this.onTheAirState,
+      nowPlayingTvSeries: nowPlayingTvSeries ?? this.nowPlayingTvSeries,
+      nowPlayingState: nowPlayingState ?? this.nowPlayingState,
       popularTvSeries: popularTvSeries ?? this.popularTvSeries,
-      popularTvSeriesState: popularTvSeriesState ?? this.popularTvSeriesState,
+      popularState: popularState ?? this.popularState,
       topRatedTvSeries: topRatedTvSeries ?? this.topRatedTvSeries,
-      topRatedTvSeriesState:
-          topRatedTvSeriesState ?? this.topRatedTvSeriesState,
+      topRatedState: topRatedState ?? this.topRatedState,
       message: message ?? this.message,
     );
   }
 
   @override
-  List<Object?> get props => [
-        onTheAirTvSeries,
-        onTheAirState,
+  List<Object> get props => [
+        nowPlayingTvSeries,
+        nowPlayingState,
         popularTvSeries,
-        popularTvSeriesState,
+        popularState,
         topRatedTvSeries,
-        topRatedTvSeriesState,
+        topRatedState,
         message,
       ];
 }

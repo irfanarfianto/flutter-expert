@@ -4,18 +4,18 @@ import 'package:submission_flutter_expert/domain/entities/tv.dart';
 import 'package:submission_flutter_expert/domain/entities/tv_detail.dart';
 
 class TvDetailState extends Equatable {
-  final TvSeriesDetail? tvSeries;
-  final RequestState tvSeriesState;
+  final TvSeriesDetail? tvSeriesDetail;
   final List<TvSeries> tvSeriesRecommendations;
+  final RequestState tvSeriesState;
   final RequestState recommendationState;
   final String message;
   final bool isAddedToWatchlist;
   final String watchlistMessage;
 
   const TvDetailState({
-    this.tvSeries,
-    this.tvSeriesState = RequestState.Empty,
+    this.tvSeriesDetail,
     this.tvSeriesRecommendations = const [],
+    this.tvSeriesState = RequestState.Empty,
     this.recommendationState = RequestState.Empty,
     this.message = '',
     this.isAddedToWatchlist = false,
@@ -23,19 +23,19 @@ class TvDetailState extends Equatable {
   });
 
   TvDetailState copyWith({
-    TvSeriesDetail? tvSeries,
-    RequestState? tvSeriesState,
+    TvSeriesDetail? tvSeriesDetail,
     List<TvSeries>? tvSeriesRecommendations,
+    RequestState? tvSeriesState,
     RequestState? recommendationState,
     String? message,
     bool? isAddedToWatchlist,
     String? watchlistMessage,
   }) {
     return TvDetailState(
-      tvSeries: tvSeries ?? this.tvSeries,
-      tvSeriesState: tvSeriesState ?? this.tvSeriesState,
+      tvSeriesDetail: tvSeriesDetail ?? this.tvSeriesDetail,
       tvSeriesRecommendations:
           tvSeriesRecommendations ?? this.tvSeriesRecommendations,
+      tvSeriesState: tvSeriesState ?? this.tvSeriesState,
       recommendationState: recommendationState ?? this.recommendationState,
       message: message ?? this.message,
       isAddedToWatchlist: isAddedToWatchlist ?? this.isAddedToWatchlist,
@@ -45,12 +45,12 @@ class TvDetailState extends Equatable {
 
   @override
   List<Object?> get props => [
-        tvSeries,
-        tvSeriesState,
+        tvSeriesDetail,
         tvSeriesRecommendations,
+        tvSeriesState,
         recommendationState,
         message,
         isAddedToWatchlist,
-        watchlistMessage,
+        watchlistMessage
       ];
 }

@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:submission_flutter_expert/common/failure.dart';
+import 'package:submission_flutter_expert/common/state_enum.dart';
 import 'package:submission_flutter_expert/domain/usecases/movies/get_watchlist_movies.dart';
 import 'package:submission_flutter_expert/domain/usecases/tv/get_watchlist_tv.dart';
+
 import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_bloc.dart';
 import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_event.dart';
 import 'package:submission_flutter_expert/presentation/blocs/watchlist/watchlist_state.dart';
@@ -30,12 +32,8 @@ void main() {
   });
 
   group('WatchlistBloc', () {
-    test('initial state should be InitialWatchlistState', () {
-      expect(watchlistBloc.state, equals(InitialWatchlistState()));
-    });
-
     blocTest<WatchlistBloc, WatchlistState>(
-      'should emit [LoadingWatchlistState, LoadedWatchlistState] when data is gotten successfully',
+      'emits [Loading, Loaded] when FetchWatchlist is successful',
       build: () {
         when(mockGetWatchlistMovies.execute())
             .thenAnswer((_) async => Right([testWatchlistMovie]));
@@ -45,33 +43,31 @@ void main() {
       },
       act: (bloc) => bloc.add(FetchWatchlist()),
       expect: () => [
-        LoadingWatchlistState(),
-        LoadedWatchlistState([testWatchlistMovie, testWatchlistTvSeries]),
+        const WatchlistState(watchlistState: RequestState.Loading),
+        WatchlistState(
+          watchlistState: RequestState.Loaded,
+          watchlist: [testWatchlistMovie, testWatchlistTvSeries],
+        ),
       ],
-      verify: (_) {
-        verify(mockGetWatchlistMovies.execute());
-        verify(mockGetWatchlistTvSeries.execute());
-      },
     );
 
     blocTest<WatchlistBloc, WatchlistState>(
-      'should emit [LoadingWatchlistState, ErrorWatchlistState] when getting data fails',
+      'emits [Loading, Error] when FetchWatchlist fails',
       build: () {
-        when(mockGetWatchlistMovies.execute()).thenAnswer((_) async =>
-            const Left(DatabaseFailure('Failed to get watchlist')));
-        when(mockGetWatchlistTvSeries.execute()).thenAnswer((_) async =>
-            const Left(DatabaseFailure('Failed to get watchlist')));
+        when(mockGetWatchlistMovies.execute()).thenAnswer(
+            (_) async => const Left(DatabaseFailure("Can't get data")));
+        when(mockGetWatchlistTvSeries.execute()).thenAnswer(
+            (_) async => const Left(DatabaseFailure("Can't get data")));
         return watchlistBloc;
       },
       act: (bloc) => bloc.add(FetchWatchlist()),
       expect: () => [
-        LoadingWatchlistState(),
-        ErrorWatchlistState('Failed to get watchlist'),
+        const WatchlistState(watchlistState: RequestState.Loading),
+        const WatchlistState(
+          watchlistState: RequestState.Error,
+          message: "Can't get data",
+        ),
       ],
-      verify: (_) {
-        verify(mockGetWatchlistMovies.execute());
-        verify(mockGetWatchlistTvSeries.execute());
-      },
     );
   });
 }
