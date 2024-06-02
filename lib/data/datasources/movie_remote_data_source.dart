@@ -32,12 +32,17 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
     return securityContext;
   }
 
+  Future<IOClient> getIOClient() async {
+    final context = await globalContext;
+    HttpClient httpClient = HttpClient(context: context);
+    httpClient.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => false;
+    return IOClient(httpClient);
+  }
+
   @override
   Future<List<MovieModel>> getNowPlayingMovies() async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/movie/now_playing?$API_KEY'));
 
@@ -50,10 +55,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<MovieDetailResponse> getMovieDetail(int id) async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/movie/$id?$API_KEY'));
 
@@ -82,10 +84,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<List<MovieModel>> getPopularMovies() async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/movie/popular?$API_KEY'));
 
@@ -98,10 +97,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
 
   @override
   Future<List<MovieModel>> getTopRatedMovies() async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/movie/top_rated?$API_KEY'));
 

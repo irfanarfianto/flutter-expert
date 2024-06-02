@@ -7,6 +7,7 @@ import '../../dummy_data/dummy_objects_tv.dart';
 import '../../helpers/test_helper.mocks.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   late TvLocalDataSourceImpl dataSource;
   late MockDatabaseHelper mockDatabaseHelper;
 

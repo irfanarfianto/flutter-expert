@@ -3,17 +3,10 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i11;
+import 'dart:async' as _i9;
 
-import 'package:bloc/bloc.dart' as _i13;
-import 'package:dartz/dartz.dart' as _i9;
+import 'package:bloc/bloc.dart' as _i11;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:submission_flutter_expert/common/failure.dart' as _i14;
-import 'package:submission_flutter_expert/domain/entities/movie.dart' as _i16;
-import 'package:submission_flutter_expert/domain/entities/movie_detail.dart'
-    as _i15;
-import 'package:submission_flutter_expert/domain/repositories/movie_repository.dart'
-    as _i8;
 import 'package:submission_flutter_expert/domain/usecases/get_watchlist_status.dart'
     as _i4;
 import 'package:submission_flutter_expert/domain/usecases/movies/get_movie_detail.dart'
@@ -25,9 +18,9 @@ import 'package:submission_flutter_expert/domain/usecases/remove_watchlist.dart'
 import 'package:submission_flutter_expert/domain/usecases/save_watchlist.dart'
     as _i5;
 import 'package:submission_flutter_expert/presentation/blocs/movies/movie_detail/movie_detail_bloc.dart'
-    as _i10;
+    as _i8;
 import 'package:submission_flutter_expert/presentation/blocs/movies/movie_detail/movie_detail_event.dart'
-    as _i12;
+    as _i10;
 import 'package:submission_flutter_expert/presentation/blocs/movies/movie_detail/movie_detail_state.dart'
     as _i7;
 
@@ -109,31 +102,10 @@ class _FakeMovieDetailState_5 extends _i1.SmartFake
         );
 }
 
-class _FakeMovieRepository_6 extends _i1.SmartFake
-    implements _i8.MovieRepository {
-  _FakeMovieRepository_6(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeEither_7<L, R> extends _i1.SmartFake implements _i9.Either<L, R> {
-  _FakeEither_7(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [MovieDetailBloc].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
+class MockMovieDetailBloc extends _i1.Mock implements _i8.MovieDetailBloc {
   MockMovieDetailBloc() {
     _i1.throwOnMissingStub(this);
   }
@@ -194,10 +166,10 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
       ) as _i7.MovieDetailState);
 
   @override
-  _i11.Stream<_i7.MovieDetailState> get stream => (super.noSuchMethod(
+  _i9.Stream<_i7.MovieDetailState> get stream => (super.noSuchMethod(
         Invocation.getter(#stream),
-        returnValue: _i11.Stream<_i7.MovieDetailState>.empty(),
-      ) as _i11.Stream<_i7.MovieDetailState>);
+        returnValue: _i9.Stream<_i7.MovieDetailState>.empty(),
+      ) as _i9.Stream<_i7.MovieDetailState>);
 
   @override
   bool get isClosed => (super.noSuchMethod(
@@ -206,7 +178,7 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
       ) as bool);
 
   @override
-  void add(_i12.MovieDetailEvent? event) => super.noSuchMethod(
+  void add(_i10.MovieDetailEvent? event) => super.noSuchMethod(
         Invocation.method(
           #add,
           [event],
@@ -215,7 +187,7 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
       );
 
   @override
-  void onEvent(_i12.MovieDetailEvent? event) => super.noSuchMethod(
+  void onEvent(_i10.MovieDetailEvent? event) => super.noSuchMethod(
         Invocation.method(
           #onEvent,
           [event],
@@ -233,9 +205,9 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
       );
 
   @override
-  void on<E extends _i12.MovieDetailEvent>(
-    _i13.EventHandler<E, _i7.MovieDetailState>? handler, {
-    _i13.EventTransformer<E>? transformer,
+  void on<E extends _i10.MovieDetailEvent>(
+    _i11.EventHandler<E, _i7.MovieDetailState>? handler, {
+    _i11.EventTransformer<E>? transformer,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -248,7 +220,7 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
 
   @override
   void onTransition(
-          _i13.Transition<_i12.MovieDetailEvent, _i7.MovieDetailState>?
+          _i11.Transition<_i10.MovieDetailEvent, _i7.MovieDetailState>?
               transition) =>
       super.noSuchMethod(
         Invocation.method(
@@ -259,17 +231,17 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
       );
 
   @override
-  _i11.Future<void> close() => (super.noSuchMethod(
+  _i9.Future<void> close() => (super.noSuchMethod(
         Invocation.method(
           #close,
           [],
         ),
-        returnValue: _i11.Future<void>.value(),
-        returnValueForMissingStub: _i11.Future<void>.value(),
-      ) as _i11.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
-  void onChange(_i13.Change<_i7.MovieDetailState>? change) =>
+  void onChange(_i11.Change<_i7.MovieDetailState>? change) =>
       super.noSuchMethod(
         Invocation.method(
           #onChange,
@@ -309,177 +281,4 @@ class MockMovieDetailBloc extends _i1.Mock implements _i10.MovieDetailBloc {
         ),
         returnValueForMissingStub: null,
       );
-}
-
-/// A class which mocks [GetMovieDetail].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockGetMovieDetail extends _i1.Mock implements _i2.GetMovieDetail {
-  MockGetMovieDetail() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i8.MovieRepository get repository => (super.noSuchMethod(
-        Invocation.getter(#repository),
-        returnValue: _FakeMovieRepository_6(
-          this,
-          Invocation.getter(#repository),
-        ),
-      ) as _i8.MovieRepository);
-
-  @override
-  _i11.Future<_i9.Either<_i14.Failure, _i15.MovieDetail>> execute(int? id) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #execute,
-          [id],
-        ),
-        returnValue:
-            _i11.Future<_i9.Either<_i14.Failure, _i15.MovieDetail>>.value(
-                _FakeEither_7<_i14.Failure, _i15.MovieDetail>(
-          this,
-          Invocation.method(
-            #execute,
-            [id],
-          ),
-        )),
-      ) as _i11.Future<_i9.Either<_i14.Failure, _i15.MovieDetail>>);
-}
-
-/// A class which mocks [GetMovieRecommendations].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockGetMovieRecommendations extends _i1.Mock
-    implements _i3.GetMovieRecommendations {
-  MockGetMovieRecommendations() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i8.MovieRepository get repository => (super.noSuchMethod(
-        Invocation.getter(#repository),
-        returnValue: _FakeMovieRepository_6(
-          this,
-          Invocation.getter(#repository),
-        ),
-      ) as _i8.MovieRepository);
-
-  @override
-  _i11.Future<_i9.Either<_i14.Failure, List<_i16.Movie>>> execute(dynamic id) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #execute,
-          [id],
-        ),
-        returnValue:
-            _i11.Future<_i9.Either<_i14.Failure, List<_i16.Movie>>>.value(
-                _FakeEither_7<_i14.Failure, List<_i16.Movie>>(
-          this,
-          Invocation.method(
-            #execute,
-            [id],
-          ),
-        )),
-      ) as _i11.Future<_i9.Either<_i14.Failure, List<_i16.Movie>>>);
-}
-
-/// A class which mocks [GetWatchListStatus].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockGetWatchListStatus extends _i1.Mock
-    implements _i4.GetWatchListStatus {
-  MockGetWatchListStatus() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i8.MovieRepository get repository => (super.noSuchMethod(
-        Invocation.getter(#repository),
-        returnValue: _FakeMovieRepository_6(
-          this,
-          Invocation.getter(#repository),
-        ),
-      ) as _i8.MovieRepository);
-
-  @override
-  _i11.Future<bool> execute(int? id) => (super.noSuchMethod(
-        Invocation.method(
-          #execute,
-          [id],
-        ),
-        returnValue: _i11.Future<bool>.value(false),
-      ) as _i11.Future<bool>);
-}
-
-/// A class which mocks [SaveWatchlist].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockSaveWatchlist extends _i1.Mock implements _i5.SaveWatchlist {
-  MockSaveWatchlist() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i8.MovieRepository get repository => (super.noSuchMethod(
-        Invocation.getter(#repository),
-        returnValue: _FakeMovieRepository_6(
-          this,
-          Invocation.getter(#repository),
-        ),
-      ) as _i8.MovieRepository);
-
-  @override
-  _i11.Future<_i9.Either<_i14.Failure, String>> execute(
-          _i15.MovieDetail? movie) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #execute,
-          [movie],
-        ),
-        returnValue: _i11.Future<_i9.Either<_i14.Failure, String>>.value(
-            _FakeEither_7<_i14.Failure, String>(
-          this,
-          Invocation.method(
-            #execute,
-            [movie],
-          ),
-        )),
-      ) as _i11.Future<_i9.Either<_i14.Failure, String>>);
-}
-
-/// A class which mocks [RemoveWatchlist].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockRemoveWatchlist extends _i1.Mock implements _i6.RemoveWatchlist {
-  MockRemoveWatchlist() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i8.MovieRepository get repository => (super.noSuchMethod(
-        Invocation.getter(#repository),
-        returnValue: _FakeMovieRepository_6(
-          this,
-          Invocation.getter(#repository),
-        ),
-      ) as _i8.MovieRepository);
-
-  @override
-  _i11.Future<_i9.Either<_i14.Failure, String>> execute(
-          _i15.MovieDetail? movie) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #execute,
-          [movie],
-        ),
-        returnValue: _i11.Future<_i9.Either<_i14.Failure, String>>.value(
-            _FakeEither_7<_i14.Failure, String>(
-          this,
-          Invocation.method(
-            #execute,
-            [movie],
-          ),
-        )),
-      ) as _i11.Future<_i9.Either<_i14.Failure, String>>);
 }

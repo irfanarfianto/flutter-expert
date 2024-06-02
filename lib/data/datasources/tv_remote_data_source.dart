@@ -32,12 +32,17 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
     return securityContext;
   }
 
+  Future<IOClient> getIOClient() async {
+    final context = await globalContext;
+    HttpClient httpClient = HttpClient(context: context);
+    httpClient.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => false;
+    return IOClient(httpClient);
+  }
+
   @override
   Future<List<TvSeriesModel>> getOnTheAirTvSeries() async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/tv/on_the_air?$API_KEY'));
 
@@ -65,10 +70,7 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
 
   @override
   Future<List<TvSeriesModel>> getSimilarTvSeries(int id) async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/tv/$id/similar?$API_KEY'));
 
@@ -81,10 +83,7 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
 
   @override
   Future<List<TvSeriesModel>> getPopularTvSeries() async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/tv/popular?$API_KEY'));
 
@@ -97,10 +96,7 @@ class TvSeriesRemoteDataSourceImpl implements TvSeriesRemoteDataSource {
 
   @override
   Future<List<TvSeriesModel>> getTopRatedTvSeries() async {
-    HttpClient client = HttpClient(context: await globalContext);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => false;
-    IOClient ioClient = IOClient(client);
+    final ioClient = await getIOClient();
     final response =
         await ioClient.get(Uri.parse('$BASE_URL/tv/top_rated?$API_KEY'));
 

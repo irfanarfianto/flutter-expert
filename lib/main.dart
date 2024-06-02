@@ -25,7 +25,6 @@ import 'package:submission_flutter_expert/presentation/pages/tv/airing_tv_today_
 import 'package:submission_flutter_expert/presentation/pages/tv/popular_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/top_rated_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/tv/tv_series_detail_page.dart';
-import 'package:submission_flutter_expert/presentation/pages/tv/watchlist_tv_series_page.dart';
 import 'package:submission_flutter_expert/presentation/pages/watchlist_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -125,9 +124,6 @@ class MyApp extends StatelessWidget {
             case TopRatedTvSeriesPage.ROUTE_NAME:
               return CupertinoPageRoute(
                   builder: (_) => const TopRatedTvSeriesPage());
-            case WatchlistTvSeriesPage.ROUTE_NAME:
-              return MaterialPageRoute(
-                  builder: (_) => const WatchlistTvSeriesPage());
             case TvSeriesDetailPage.ROUTE_NAME:
               final id = settings.arguments as int;
               return MaterialPageRoute(
