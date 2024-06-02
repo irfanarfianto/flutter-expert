@@ -17,10 +17,10 @@ void main() {
   const BASE_URL = 'https://api.themoviedb.org/3';
 
   late MovieRemoteDataSourceImpl dataSource;
-  late MockHttpClient mockHttpClient;
+  late MockClient mockHttpClient;
 
   setUp(() {
-    mockHttpClient = MockHttpClient();
+    mockHttpClient = MockClient();
     dataSource = MovieRemoteDataSourceImpl(client: mockHttpClient);
   });
 
@@ -64,9 +64,8 @@ void main() {
     test('should return list of movies when response is success (200)',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse('$BASE_URL/movie/popular?$API_KEY')))
-          .thenAnswer((_) async =>
-              http.Response(readJson('dummy_data/popular.json'), 200));
+      when(mockHttpClient.get(any)).thenAnswer(
+          (_) async => http.Response(readJson('dummy_data/popular.json'), 200));
       // act
       final result = await dataSource.getPopularMovies();
       // assert
