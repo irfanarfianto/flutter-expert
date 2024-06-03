@@ -4,3 +4,7 @@
 
 ## Pengujian
 ![alt text](/assets/image.png)
+
+## Firebase Analytics & Crashlytics
+![alt text](/assets/analytics.png)
+![alt text](/assets/crashlytics.png)

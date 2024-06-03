@@ -44,6 +44,14 @@ class HomeMovieTvPage extends StatelessWidget {
                 leading: const Icon(Icons.info_outline),
                 title: const Text('About'),
               ),
+              // ListTile(
+              //   onTap: () {
+              //     FirebaseCrashlytics.instance.crash();
+              //     Navigator.pushNamed(context, ROUTE_NAME);
+              //   },
+              //   leading: const Icon(Icons.search),
+              //   title: const Text('Search'),
+              // ),
             ],
           ),
         ),
