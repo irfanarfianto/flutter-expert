@@ -1,7 +1,9 @@
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:submission_flutter_expert/data/datasources/db/database_helper.dart';
 import 'package:submission_flutter_expert/data/datasources/movie_local_data_source.dart';
 import 'package:submission_flutter_expert/data/datasources/movie_remote_data_source.dart';
+import 'package:submission_flutter_expert/data/utils/ssl_client_provider.dart';
 import 'package:submission_flutter_expert/data/datasources/tv_local_data_source.dart';
 import 'package:submission_flutter_expert/data/datasources/tv_remote_data_source.dart';
 import 'package:submission_flutter_expert/data/repositories/movie_repository_impl.dart';
@@ -41,7 +43,9 @@ import 'package:get_it/get_it.dart';
 
 final locator = GetIt.instance;
 
-void init() {
+Future<void> init() async {
+  IOClient ioClient = await SslPinning.ioClient;
+
   // Blocs
   locator.registerFactory(() => AiringTodayTvSeriesBloc(locator()));
   locator.registerFactory(() => PopularTvSeriesBloc(locator()));
@@ -124,13 +128,13 @@ void init() {
 
   // Data Sources - Movies
   locator.registerLazySingleton<MovieRemoteDataSource>(
-      () => MovieRemoteDataSourceImpl(client: locator()));
+      () => MovieRemoteDataSourceImpl(locator()));
   locator.registerLazySingleton<MovieLocalDataSource>(
       () => MovieLocalDataSourceImpl(databaseHelper: locator()));
 
   // Data Sources - TV Series
   locator.registerLazySingleton<TvSeriesRemoteDataSource>(
-      () => TvSeriesRemoteDataSourceImpl(client: locator()));
+      () => TvSeriesRemoteDataSourceImpl(locator()));
   locator.registerLazySingleton<TvLocalDataSource>(
       () => TvLocalDataSourceImpl(databaseHelper: locator()));
 
@@ -139,4 +143,5 @@ void init() {
 
   // External
   locator.registerLazySingleton(() => http.Client());
+  locator.registerLazySingleton<IOClient>(() => ioClient);
 }
